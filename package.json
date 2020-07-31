@@ -1,0 +1,56 @@
+{
+  "name": "popular_traders",
+  "description": "Office Application",
+  "version": "0.1.0",
+  "private": true,
+  "main": "public/electron.js",
+  "author": "Muhammad Yahya",
+  "license": "ISC",
+  "homepage": "./",
+  "dependencies": {
+    "electron-is-dev": "^1.0.1",
+    "prop-types": "^15.6.2",
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0",
+    "react-scripts": "2.1.3"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "electron-dev": "concurrently \"SET BROWSER=none&&yarn run start\" \"wait-on http://localhost:3000 && electron .\"",
+    "preelectron-pack": "yarn build",
+    "electron-pack": "electron-builder"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "devDependencies": {
+    "concurrently": "^4.1.0",
+    "electron": "^4.0.4",
+    "electron-builder": "^20.38.5",
+    "wait-on": "^3.2.0"
+  },
+  "build": {
+    "appId": "com.github.srinathh.snippetfu",
+    "files": [
+      "build/**/*"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    },
+    "win": {
+      "target": "portable"
+    },
+    "linux": {
+      "category": "Utility"
+    }
+  }
+}
