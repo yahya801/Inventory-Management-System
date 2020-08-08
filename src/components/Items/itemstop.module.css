@@ -1,0 +1,53 @@
+.topbox {
+    height: 100px;
+    background-color: red;
+    width: auto;
+    margin-top: 10px;
+    margin-left: 200px;
+    padding-left: 10px;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.addbutton {
+    margin: 10px
+}
+
+.itembox {
+    margin-top: 10px;
+    margin-left: 200px;
+    height: auto;
+    padding-left: 10px;
+    max-height: 500px;
+    width: 82.5%;
+    background-color: white;
+    overflow: auto;
+    position: fixed;
+}
+
+table {
+    padding-top: 50px;
+    width: 95%;
+    border: 1;
+
+}
+
+th,
+td {
+    text-align: left;
+    padding: 10px;
+}
+
+tr:nth-child(even) {
+    background-color: #c45f5f;
+}
+
+/* table {
+  /* border-collapse: collapse;
+  position: relative; */
+/* width: 80%; */
+/* margin-left: 200px; */
+
+
+
+/* } */
