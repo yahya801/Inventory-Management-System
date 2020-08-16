@@ -1,7 +1,7 @@
 import React from 'react'
 import Sidebar from '../sidebar'
 import Navbar from '../navbar'
-import Items from './itemstop'
+// import Items from './itemstop'
 import ItemTable from './itemtableview'
 
 export function Itemsview() {
@@ -9,7 +9,7 @@ export function Itemsview() {
         <div>
             <Sidebar items={true} />
             <Navbar />
-            <Items />
+            {/* <Items /> */}
             <ItemTable />
 
         </div>

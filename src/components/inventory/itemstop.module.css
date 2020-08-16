@@ -1,6 +1,6 @@
 .topbox {
     height: 100px;
-    background-color: red;
+    background-color: #c4b174;
     width: auto;
     margin-top: 10px;
     margin-left: 200px;
@@ -18,7 +18,7 @@
     margin-left: 200px;
     height: auto;
     padding-left: 20px;
-    max-height: 500px;
+    min-height: 800px;
     width: 82.5%;
     background-color: white;
     overflow: auto;
@@ -32,7 +32,7 @@ h2{
 table {
     padding-top: 50px;
     width: 95%;
-    
+    /* height: 80%; */
     
     border-style: solid;
     border-width: 2px;
@@ -86,30 +86,6 @@ tr:nth-child(even) {
     padding: 10px;
     box-sizing: border-box;
 
-}
-.editbox{
-    height: 20px;
-    width: 20%;
-    border: 2px solid black;
-    /* display: none; */
-}
-.pageitem {
-   
-   
-   
-}
-.pagination{
-    display: inline;
-    list-style: none;
-    /* border: 2px solid black; */
-}
-
-.page_link{
-    display: inline-block;
-    background: #ea3a53;
-    border: 1px solid blue;
-    /* margin: 2px; */
-    padding: 5px
 }
 
 /* table {

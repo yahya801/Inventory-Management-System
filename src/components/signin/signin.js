@@ -24,12 +24,7 @@ export function Signin() {
     }
   };
   useEffect(() => {
-    // var myListener = function (event, args) {}
-    // Update the document title using the browser API
-    // window.addEventListener("Userloggedin",  messages => {
-    //   console.log(messages);
-    //   window.location = "/dashboard";
-    // });
+   
     ipcRenderer.on("Userloggedin", (event, messages) => {
       console.log(messages);
       window.location = "/dashboard";

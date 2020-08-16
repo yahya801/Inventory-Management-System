@@ -8,6 +8,7 @@ const DB = require("./database");
 const path = require("path");
 const url = require("url");
 const isDev = require("electron-is-dev");
+const { connect } = require("http2");
 let mainWindow;
 var connection = mysql.createConnection({
   host: "127.0.0.1",
@@ -33,13 +34,13 @@ function createWindow() {
   );
 
   mainWindow.once("ready-to-show", () => {
-    createconnection();
+    // createconnection();
     mainWindow.maximize();
     mainWindow.show();
   });
 
   mainWindow.on("closed", function () {
-    endconnection();
+    // endconnection();
     app.quit();
   });
 }
@@ -84,6 +85,7 @@ ipcMain.on("Addusername", (event, arg) => {
 });
 
 ipcMain.on("Userlogin", (event, arg) => {
+  // createconnection()
   console.log(arg);
   var login;
   connection.query(DB.searchuser, [arg.username], (err, result) => {
@@ -91,19 +93,77 @@ ipcMain.on("Userlogin", (event, arg) => {
       event.reply("Userloggedinfailed", "Incorrect Password/Username");
     } else {
       bcrypt.compare(arg.password, result[0].password, function (err, result) {
-       if(result === true){
-        login = result;
-        event.reply("Userloggedin", "Successfully User Logged in");
-       }
-       else{
-        event.reply("Userloggedinfailed", "Incorrect Password or Username");
-       }
+        if (result === true) {
+          login = result;
+          event.reply("Userloggedin", "Successfully User Logged in");
+        } else {
+          event.reply("Userloggedinfailed", "Incorrect Password or Username");
+        }
       });
     }
   });
+  // endconnection()
 });
 
-function createconnection() {
+ipcMain.on("AddItems",async (event, arg) => {
+  console.log(arg);
+  item = [arg.itemname, arg.description, arg.category, arg.origin];
+  connection.query(DB.additem,item,(err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log("Item added")
+      
+      // event.reply("ItemAdded", "Successfully Added Item");
+    }
+  })
+});
+ipcMain.on("ItemsQuery",async (event)=> {
+ connection.query(DB.viewitems,(err,result) => {
+  event.sender.send("ItemsQuerySuccessful", result);
+  
+  //  console.log(result[0].itemname,"hhh")
+  //  console.log(result[1])
+ })
+})
+ipcMain.on("DeleteItem",(event,arg)=> {
+  console.log(arg)
+  itemid = [arg.ItemID]
+  connection.query(DB.deleteitems,itemid,(err) => {
+    if(err){
+      console.log(err)
+    }
+    else{
+      console.log("Deleted Successfully")
+    }
+  })
+})
+ipcMain.on("EditItemQuery",  (event,arg)=>{
+  if(arg){
+    console.log(arg)
+    itemid = [arg]
+    connection.query(DB.selecteditem,itemid,(err,result)=>{
+      if(err){
+        console.log(err)
+      }
+      else{
+        event.sender.send("ItemsEditQuerySuccessful", result);
+      }
+    })
+  }
+})
+ipcMain.on("EditItem",(event,arg) => {
+  query = [arg.itemname,arg.description,arg.category,arg.origin,arg.itemID]
+ connection.query(DB.updateitem,query,(err)=>{
+   if(err){
+     console.log(err)
+   }
+   else{
+     console.log("Updated")
+   }
+ })
+})
+async function createconnection() {
   connection.connect();
   console.log("Connection Succsessful");
 }
