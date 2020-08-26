@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from "./signup.module.css";
+import {Link } from 'react-router-dom'
 const { ipcRenderer } = window.require("electron");
 
 export function Signup() {
@@ -67,7 +68,7 @@ export function Signup() {
 
             <button onClick={(e) => handleClick(e)}>Create</button>
             <p className={styles.message}>
-              Already registered? <a href="/signin">Sign In</a>
+              Already registered?  <Link to="/signin">Sign In</Link>
             </p>
           </form>
         </div>

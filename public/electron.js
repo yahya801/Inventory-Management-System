@@ -128,12 +128,13 @@ ipcMain.on("ItemsQuery",async (event)=> {
 })
 ipcMain.on("DeleteItem",(event,arg)=> {
   console.log(arg)
-  itemid = [arg.ItemID]
+  itemid = [arg]
   connection.query(DB.deleteitems,itemid,(err) => {
     if(err){
       console.log(err)
     }
     else{
+      event.sender.send("DeletedSuccessfully");
       console.log("Deleted Successfully")
     }
   })

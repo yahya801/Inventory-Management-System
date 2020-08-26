@@ -1,82 +1,58 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Modal, Button, Row, Col, Form } from "react-bootstrap";
 import styles from "./itemstop.module.css";
+import { Redirect } from "react-router-dom";
 const { ipcRenderer } = window.require("electron");
-
-export function EditItemModal(props) {
-  const [itemID, SetItemId] = useState("");
+function ItemModal(props) {
   const [itemname, Setitemname] = useState("");
   const [description, Setdescription] = useState("");
   const [category, SetCategory] = useState("Select");
   const [origin, Setorigin] = useState("");
   const [error, Seterror] = useState("");
-  const [listener, Setlistener] = useState(false);
-  const [reload, Setreload] = useState(false);
-  const id = props.passitem.ItemID;
-  let listen = false;
-  let count = 0;
-  
+  const [redirect,Setredirect] = useState("");
   const handleClick = (evt) => {
     evt.preventDefault();
-    // console.log("heloo");
-    const array = {
-      itemname,
-      description,
-      category,
-      origin,
-      itemID
-    };
-console.log(array)
-ipcRenderer.send("EditItem", array);
-window.location = "/items/edit";
+console.log("Form Submit")  
+const array = {
+    itemname,
+    description,
+    category,
+    origin,
+  };
+  if (!itemname || !description || !origin || category == "Select") {
+    Seterror("Fields input wrong");
+  } else {
+    ipcRenderer.send("AddItems", array);
+    Setitemname("");
+    Setdescription("");
+    SetCategory("Select");
+    Setorigin("");
+    Seterror("");
+    // Setredirect("/items")
+    props.onHide();
     
-  };
-  const callBack = () => {
-    Setreload(true);
-  };
-  const getdata = async () => {
-    console.log(props);
-
-    SetItemId(props.passitem.ItemID);
-    Setitemname(props.passitem.itemname);
-
-    
-  };
-  function setarray() {
-    //   Setlistener(true)
-      setTimeout(() =>{ Setitemname(props.passitem.itemname);
-        Setlistener(true)
-        SetItemId(props.passitem.ItemID);
-        Setdescription(props.passitem.description);
-        SetCategory(props.passitem.category);
-        Setorigin(props.passitem.origin);},1000)
-   
+    // window.location = "/items/add";
   }
 
-  useEffect(() => {
-      
- setarray()
- console.log(props)
-      
-    
-  },[props] );
+}
 
   return (
     <div>
       <Modal
-        className={styles.modal}
         {...props}
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
+        data-backdrop="false"
       >
-        <Modal.Header>
+        
+        <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
-            Edit Item
+            Add New Item
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {/* <h4>Centered Modal</h4> */}
+          <h4>Add New Item Form</h4>
           <div className={styles.form}>
             <form>
               <input
@@ -87,9 +63,7 @@ window.location = "/items/edit";
                 onChange={(e) => Setitemname(e.target.value)}
                 placeholder="itemname"
               />
-              <br />
-
-              <input
+               <input
                 className={styles.inputtext}
                 type="text"
                 value={description}
@@ -97,8 +71,7 @@ window.location = "/items/edit";
                 onChange={(e) => Setdescription(e.target.value)}
                 placeholder="description"
               />
-              <br />
-              <label required>
+               <label required>
                 Pick your Category:
                 <select
                   value={category}
@@ -111,24 +84,27 @@ window.location = "/items/edit";
                   <option value="Spices">Spices</option>
                 </select>
               </label>
-              <br />
               <input
                 className={styles.inputtext}
                 type="text"
                 value={origin}
                 required
                 onChange={(e) => Setorigin(e.target.value)}
-                placeholder="description"
+                placeholder="Origin"
               />
               {error}
               <button onClick={(e) => handleClick(e)}>Submit</button>
             </form>
+            {redirect ? <Redirect to='/items' /> : null}
           </div>
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={props.onHide}>Close</Button>
         </Modal.Footer>
       </Modal>
+     
     </div>
   );
 }
+
+export default ItemModal;

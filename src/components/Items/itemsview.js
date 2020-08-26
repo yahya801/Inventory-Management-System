@@ -8,7 +8,7 @@ export function Itemsview() {
     return (
         <div>
             <Sidebar items={true} />
-            <Navbar />
+            {/* <Navbar /> */}
             {/* <Items /> */}
             <ItemTable />
 

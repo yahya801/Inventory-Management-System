@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState,useEffect } from "react";
 import { Modal, Button, Row, Col, Form } from "react-bootstrap";
 import styles from "./itemstop.module.css";
 const { ipcRenderer } = window.require("electron");
 
-export function NewItemModal(props) {
+function Editmodal(props) {
+  const [itemID, SetItemId] = useState("");
   const [itemname, Setitemname] = useState("");
   const [description, Setdescription] = useState("");
   const [category, SetCategory] = useState("Select");
   const [origin, Setorigin] = useState("");
-  const [error, Seterror] = useState("");
+  const id = props.passitem.ItemID;
+
   const handleClick = (evt) => {
     evt.preventDefault();
     // console.log("heloo");
@@ -17,39 +19,47 @@ export function NewItemModal(props) {
       description,
       category,
       origin,
+      itemID
     };
-    // console.log(array)
-    // console.log(category)
-    if (!itemname || !description || !origin || category == "Select") {
-      Seterror("Fields input wrong");
-    } else {
-      ipcRenderer.send("AddItems", array);
-      Setitemname("");
-      Setdescription("");
-      SetCategory("Select");
-      Setorigin("");
-      Seterror("");
-      window.location = "/items";
-    }
-  };
-  useEffect(() => {}, []);
-
+console.log(array)
+ipcRenderer.send("EditItem", array);
+props.onHide()
+  }
+  const Setarray = () => {
+    setTimeout(() =>{ Setitemname(props.passitem.itemname);
+        // Setlistener(true)
+        SetItemId(props.passitem.ItemID);
+        Setdescription(props.passitem.description);
+        SetCategory(props.passitem.category);
+        Setorigin(props.passitem.origin);},1000)
+  
+  }
+  useEffect(() => {
+      console.log(id)
+    Setarray()
+    // Setitemname(props.passitem.itemname);
+    // //    console.log(itemname) // Setlistener(true)
+    //     SetItemId(props.passitem.ItemID);
+    //     Setdescription(props.passitem.description);
+    //     SetCategory(props.passitem.category);
+    //     Setorigin(props.passitem.origin)
+},[id])
   return (
     <div>
       <Modal
-        className={styles.modal}
         {...props}
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
       >
-        <Modal.Header>
+        <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
-            Add New Item
+            Edit Item
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {/* <h4>Centered Modal</h4> */}
+          {/* {updateinfo()} */}
           <div className={styles.form}>
             <form>
               <input
@@ -60,7 +70,6 @@ export function NewItemModal(props) {
                 onChange={(e) => Setitemname(e.target.value)}
                 placeholder="itemname"
               />
-              <br />
               <input
                 className={styles.inputtext}
                 type="text"
@@ -69,7 +78,6 @@ export function NewItemModal(props) {
                 onChange={(e) => Setdescription(e.target.value)}
                 placeholder="description"
               />
-              <br />
               <label required>
                 Pick your Category:
                 <select
@@ -83,16 +91,15 @@ export function NewItemModal(props) {
                   <option value="Spices">Spices</option>
                 </select>
               </label>
-              <br />
               <input
                 className={styles.inputtext}
                 type="text"
                 value={origin}
                 required
                 onChange={(e) => Setorigin(e.target.value)}
-                placeholder="description"
+                placeholder="Origin"
               />
-              {error}
+              {/* {error} */}
               <button onClick={(e) => handleClick(e)}>Submit</button>
             </form>
           </div>
@@ -104,3 +111,5 @@ export function NewItemModal(props) {
     </div>
   );
 }
+
+export default Editmodal;

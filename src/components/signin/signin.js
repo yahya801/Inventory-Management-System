@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import {Link,Redirect } from 'react-router-dom'
 import styles from "./signin.module.css";
 const { ipcRenderer } = window.require("electron");
 
@@ -7,6 +8,7 @@ export function Signin() {
   const [password, Setpassword] = useState("");
   const [error, Seterror] = useState("");
   const [useradded, SetUseradded] = useState("");
+  const [redirect2,Setredirect] = useState("");
 
   const handleClick = (evt) => {
     evt.preventDefault();
@@ -26,8 +28,7 @@ export function Signin() {
   useEffect(() => {
    
     ipcRenderer.on("Userloggedin", (event, messages) => {
-      console.log(messages);
-      window.location = "/dashboard";
+      Setredirect("/dashboard")
     });
 
     ipcRenderer.on("Userexists", (event, messages) => {
@@ -77,12 +78,12 @@ export function Signin() {
 
             <button onClick={(e) => handleClick(e)}>Create</button>
             <p className={styles.message}>
-              Already registered? <a href="/signup">Sign Up</a>
+              Already registered?  <Link to="/signup">Sign Up</Link> 
             </p>
           </form>
         </div>
       </div>
-      ;
+      {redirect2 ? <Redirect to="/dashboard" /> : null}
     </div>
   );
 }
