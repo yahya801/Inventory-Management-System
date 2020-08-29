@@ -164,6 +164,17 @@ ipcMain.on("EditItem",(event,arg) => {
    }
  })
 })
+ipcMain.on("SearchItems" ,(event,arg) => {
+  console.log(arg)
+  connection.query(DB.searchItem,arg,(err,result) => {
+    if(err){
+      console.log(err)
+    }
+    else{
+      event.sender.send("SearchItemResult", result);
+    }
+  })
+})
 async function createconnection() {
   connection.connect();
   console.log("Connection Succsessful");

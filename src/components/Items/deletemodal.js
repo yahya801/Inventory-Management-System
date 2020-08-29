@@ -2,11 +2,11 @@ import React from "react";
 import { Modal, Button, Row, Col, Form } from "react-bootstrap";
 const { ipcRenderer } = window.require("electron");
 function Deletemodal(props) {
-    const handleclick =() => {
-        console.log(props.passitem.ItemID)
-        ipcRenderer.send("DeleteItem",props.passitem.ItemID)
-        props.onHide()
-    }
+  const handleclick = () => {
+    console.log(props.passitem.ItemID);
+    ipcRenderer.send("DeleteItem", props.passitem.ItemID);
+    props.onHide();
+  };
   return (
     <div>
       <Modal

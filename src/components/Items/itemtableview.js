@@ -8,19 +8,27 @@ import ItemModal from "./itemmodal";
 import Editmodal from "./editmodal";
 import Deletemodal from "./deletemodal";
 import Pagination from "./pagination";
+import Itemview from "./itemview";
 import "./style.css";
 const { ipcRenderer } = window.require("electron");
 function Itemtableview() {
+  const [itemshowModal, SetitemshowModal] = useState(false);
   const [addModalshow, SetaddModalShow] = useState(false);
   const [editModalshow, SeteditModalShow] = useState(false);
   const [deleteModalshow, Setdeletemodalshow] = useState(false);
+  const [itemview, Setitemview] = useState({});
   const [editItems, SeteditItems] = useState({});
   const [items, SetItems] = useState([]);
-  const [updateitems, Setupdateitems] = useState();
   const [listener, Setlistener] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(5);
   const [Deleteitem, SetDeleteitem] = useState("");
+  const [search, Setsearch] = useState("");
+  const [searchredirect, Setsearchredirect] = useState(false);
+  const [itemnameclic,Setitemclick] = useState(false)
+  let itemModalClose = () => {
+    SetitemshowModal(false);
+  };
   let addModalClose = () => {
     SetaddModalShow(false);
   };
@@ -51,32 +59,17 @@ function Itemtableview() {
         return Item.ItemID;
       })
       .indexOf(itemid);
-    // let a;
-
     SeteditItems(items[removeindex]);
-    // console.log(items[removeindex]);
-    // console.log(items[removeindex].ItemID)
-    // ipcRenderer.send("EditItemQuery",items[removeindex].ItemID)
-
-    // ipcRenderer.on("ItemsEditQuerySuccessful", (err, result) => {
-
-    //    console.log(result)
-    //   })
-    // console.log(editItems);
     SeteditModalShow(true);
   };
 
   useEffect(() => {
-    // let listener = false;
     ipcRenderer.send("ItemsQuery");
 
     if (!listener) {
       console.log(listener);
       Setlistener(true);
       ipcRenderer.on("ItemsQuerySuccessful", async (err, result) => {
-        // console.log(result);
-        // Setlistener(true)
-        // console.log(listener);
         SetItems(result);
       });
     }
@@ -90,43 +83,29 @@ function Itemtableview() {
     console.log(removeindex);
     console.log(itemname);
     SetDeleteitem(items[removeindex]);
-
-    // console.log(itemid)
-    // const r = window.confirm(
-    // `Do you really want to Delete ${itemname}?`
-    // );
-    // if (r == true) {
     Setdeletemodalshow(true);
-    // var removeindex = items
-    //   .map(function (Item) {
-    //     return Item.ItemID;
-    //   })
-    //   .indexOf(itemid);
-
-    // console.log(removeindex);
-    // Setupdateitems([items])
-
-    // const r = window.confirm(
-    //   `Do you really want to Delete ${items[removeindex].itemname}?`
-    // );
-    // if (r == true) {
-    // items.splice(removeindex, 1);
-    // console.log(items)
-    //  const newitem = items
-    //   console.log(newitem)
-    //     newitem.splice(removeindex,1)
-    //     console.log(newitem)
-    //     const deleteitem = items[removeindex];
-    //     console.log(deleteitem);
-    //     SetItems(newitem)
-    // ipcRenderer.send("DeleteItem", deleteitem);
-    // this.setState({ items: newitem })
-    // ipcRenderer.on("DeletedSuccessfully",(err) =>{
-    //   window.location = "/items/delete";
-    // })
-
-    // }
-    // }
+  };
+  const searchclick = () => {
+    if (search == "") {
+    } else {
+      console.log(search);
+      Setsearchredirect(true);
+    }
+  };
+  const itemnameclick = (itemid) => {
+    var itemnameindex = items
+      .map(function (Item) {
+        return Item.ItemID;
+      })
+      .indexOf(itemid);
+    console.log(itemnameindex);
+    // console.log(items[itemnameindex])
+    // Setitemclick(true)
+    SetitemshowModal(true);
+    Setitemview(items[itemnameindex]);
+    // console.log(itemname);
+    // SetDeleteitem(items[removeindex]);
+    // Setdeletemodalshow(true);
   };
 
   // Get current posts
@@ -138,13 +117,25 @@ function Itemtableview() {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
-    //   <div><Items /></div>
-    //   <Items />
     <div>
       <Items />
       <div style={{ paddingLeft: "10px" }}>
         <div className={styles.itembox}>
-          <h2>Manage Items</h2>
+          <div className="row">
+            <h5>Manage Items</h5>
+            <input
+              // className={styles.inputtext}
+              type="text"
+              value={search}
+              required
+              onChange={(e) => Setsearch(e.target.value)}
+              placeholder="Search"
+            />
+            <button onClick={() => searchclick()}>Search</button>
+            {searchredirect ? (
+              <Redirect to={`/itemsearch?itemname=${search}`} />
+            ) : null}
+          </div>
           <div>
             <ButtonToolbar>
               <Button variant="primary" onClick={() => SetaddModalShow(true)}>
@@ -153,8 +144,7 @@ function Itemtableview() {
               <ItemModal show={addModalshow} onHide={addModalClose} />
             </ButtonToolbar>
             <Container>
-              {addModalshow}
-              <Table bordered stripped hover>
+              <Table striped bordered hover>
                 <thead>
                   <tr>
                     <th>Item No</th>
@@ -172,9 +162,16 @@ function Itemtableview() {
                 <tbody>
                   {currentitems.map((Item, index) => (
                     <tr Key={Item.ItemID}>
-                      <td>{Item.ItemID}</td>
-                      <td className={styles.itemname}>{Item.itemname}</td>
-
+                      <td>{index + 1}</td>
+                      
+                      <td
+                        onClick={() => itemnameclick(Item.ItemID)}
+                        className={styles.itemname}
+                      >
+                        
+                         {Item.itemname}
+                       
+                      </td>
                       <td>{Item.description}</td>
                       <td>{Item.category}</td>
                       <td>{Item.origin}</td>
@@ -224,6 +221,12 @@ function Itemtableview() {
             totalPosts={items.length}
             paginate={paginate}
           />
+          <Itemview
+                        
+                        passitem={itemview}
+                          show={itemshowModal}
+                          onHide={itemModalClose}
+                        />
         </div>
       </div>
     </div>

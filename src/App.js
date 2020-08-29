@@ -5,6 +5,7 @@ import { Signup } from "./components/signup/signup";
 import { Signin } from "./components/signin/signin";
 import { Itemsview } from "./components/Items/itemsview";
 import { Inventoryview } from "./components/inventory/inventoryview";
+import Itemsearch from './components/Items/searchview'
 
 export default class App extends Component {
   render() {
@@ -17,6 +18,7 @@ export default class App extends Component {
             <Route path="/signin" component={Signin} />
             <Route path="/dashboard" component={Dashboard} />
             <Route path="/items" component={Itemsview} />
+            <Route path="/itemsearch" component = {Itemsearch} />
             <Route path="/inventory" component={Inventoryview} />
           </div>
         </Switch>

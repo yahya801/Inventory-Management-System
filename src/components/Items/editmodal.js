@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Button, Row, Col, Form } from "react-bootstrap";
 import styles from "./itemstop.module.css";
 const { ipcRenderer } = window.require("electron");
@@ -13,37 +13,30 @@ function Editmodal(props) {
 
   const handleClick = (evt) => {
     evt.preventDefault();
-    // console.log("heloo");
     const array = {
       itemname,
       description,
       category,
       origin,
-      itemID
+      itemID,
     };
-console.log(array)
-ipcRenderer.send("EditItem", array);
-props.onHide()
-  }
+    console.log(array);
+    ipcRenderer.send("EditItem", array);
+    props.onHide();
+  };
   const Setarray = () => {
-    setTimeout(() =>{ Setitemname(props.passitem.itemname);
-        // Setlistener(true)
-        SetItemId(props.passitem.ItemID);
-        Setdescription(props.passitem.description);
-        SetCategory(props.passitem.category);
-        Setorigin(props.passitem.origin);},1000)
-  
-  }
+    // setTimeout(() => {
+      Setitemname(props.passitem.itemname);
+      SetItemId(props.passitem.ItemID);
+      Setdescription(props.passitem.description);
+      SetCategory(props.passitem.category);
+      Setorigin(props.passitem.origin);
+    // }, 1000);
+  };
   useEffect(() => {
-      console.log(id)
-    Setarray()
-    // Setitemname(props.passitem.itemname);
-    // //    console.log(itemname) // Setlistener(true)
-    //     SetItemId(props.passitem.ItemID);
-    //     Setdescription(props.passitem.description);
-    //     SetCategory(props.passitem.category);
-    //     Setorigin(props.passitem.origin)
-},[id])
+    // console.log(id);
+    Setarray();
+  }, [id]);
   return (
     <div>
       <Modal
@@ -58,9 +51,7 @@ props.onHide()
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {/* <h4>Centered Modal</h4> */}
-          {/* {updateinfo()} */}
-          <div className={styles.form}>
+         <div className={styles.form}>
             <form>
               <input
                 className={styles.inputtext}

@@ -21,7 +21,7 @@
     max-height: 575px;
     width: 82.5%;
     background-color: white;
-    overflow: auto;
+    /* overflow: auto; */
     position: fixed;
    
 }
@@ -29,26 +29,26 @@ h2{
     position:  sticky;
 }
 
-table {
+/* table {
     padding-top: 50px;
-    width: 95%;
+    width: 90%;
     
     
     border-style: solid;
     border-width: 2px;
     border-color: #c45f5f;
-}
+} */
 
 th,
 td {
     text-align: left;
    padding: 10px;
-   font-size: medium;
+   /* font-size: medium; */
     /* border-style: solid; */
 }
 
 tr:nth-child(even) {
-    background-color: #c45f5f;
+    background-color: #d80808;
 }
 
 .modal {
@@ -153,11 +153,11 @@ tr:nth-child(even) {
 }
 .page_link:hover{
     background: #79a177;
-    cursor: pointer !important;
+    cursor: pointer;
 }
 .itemname:hover{
     cursor: pointer;
-    background: #79a177;
+    /* background: #79a177; */
 }
 
 /* table {

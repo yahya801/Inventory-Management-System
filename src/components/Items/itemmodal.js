@@ -9,32 +9,28 @@ function ItemModal(props) {
   const [category, SetCategory] = useState("Select");
   const [origin, Setorigin] = useState("");
   const [error, Seterror] = useState("");
-  const [redirect,Setredirect] = useState("");
+  const [redirect, Setredirect] = useState("");
   const handleClick = (evt) => {
     evt.preventDefault();
-console.log("Form Submit")  
-const array = {
-    itemname,
-    description,
-    category,
-    origin,
+    console.log("Form Submit");
+    const array = {
+      itemname,
+      description,
+      category,
+      origin,
+    };
+    if (!itemname || !description || !origin || category == "Select") {
+      Seterror("Fields input wrong");
+    } else {
+      ipcRenderer.send("AddItems", array);
+      Setitemname("");
+      Setdescription("");
+      SetCategory("Select");
+      Setorigin("");
+      Seterror("");
+      props.onHide();
+    }
   };
-  if (!itemname || !description || !origin || category == "Select") {
-    Seterror("Fields input wrong");
-  } else {
-    ipcRenderer.send("AddItems", array);
-    Setitemname("");
-    Setdescription("");
-    SetCategory("Select");
-    Setorigin("");
-    Seterror("");
-    // Setredirect("/items")
-    props.onHide();
-    
-    // window.location = "/items/add";
-  }
-
-}
 
   return (
     <div>
@@ -45,7 +41,6 @@ const array = {
         centered
         data-backdrop="false"
       >
-        
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
             Add New Item
@@ -63,7 +58,7 @@ const array = {
                 onChange={(e) => Setitemname(e.target.value)}
                 placeholder="itemname"
               />
-               <input
+              <input
                 className={styles.inputtext}
                 type="text"
                 value={description}
@@ -71,7 +66,7 @@ const array = {
                 onChange={(e) => Setdescription(e.target.value)}
                 placeholder="description"
               />
-               <label required>
+              <label required>
                 Pick your Category:
                 <select
                   value={category}
@@ -93,16 +88,15 @@ const array = {
                 placeholder="Origin"
               />
               {error}
-              <button onClick={(e) => handleClick(e)}>Submit</button>
+              <Button onClick={(e) => handleClick(e)}>Submit</Button>
             </form>
-            {redirect ? <Redirect to='/items' /> : null}
+            {redirect ? <Redirect to="/items" /> : null}
           </div>
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={props.onHide}>Close</Button>
         </Modal.Footer>
       </Modal>
-     
     </div>
   );
 }

@@ -8,5 +8,6 @@ module.exports = {
  viewitems: "SELECT * FROM `Items`",
  deleteitems: "DELETE FROM `Items` WHERE `ItemID` = ?",
  selecteditem: "SELECT * FROM `Items` WHERE `ItemID` = ?",
+ searchItem: "SELECT * FROM `Items` WHERE `itemname` = ?",
  updateitem: "UPDATE `Items` SET `itemname` = ?,`description`= ?, `category` = ?, `origin` = ?  WHERE `ItemID` = ?"
 };
