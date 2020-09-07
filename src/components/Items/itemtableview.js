@@ -80,8 +80,8 @@ function Itemtableview() {
         return Item.ItemID;
       })
       .indexOf(itemid);
-    console.log(removeindex);
-    console.log(itemname);
+    // console.log(removeindex);
+    // console.log(itemname);
     SetDeleteitem(items[removeindex]);
     Setdeletemodalshow(true);
   };
@@ -123,6 +123,7 @@ function Itemtableview() {
         <div className={styles.itembox}>
           <div className="row">
             <h5>Manage Items</h5>
+            <form>
             <input
               // className={styles.inputtext}
               type="text"
@@ -132,6 +133,7 @@ function Itemtableview() {
               placeholder="Search"
             />
             <button onClick={() => searchclick()}>Search</button>
+            </form>
             {searchredirect ? (
               <Redirect to={`/itemsearch?itemname=${search}`} />
             ) : null}

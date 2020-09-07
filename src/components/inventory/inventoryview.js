@@ -8,7 +8,7 @@ export function Inventoryview() {
     return (
         <div>
             <Sidebar inventory={true}/>
-            <Navbar />
+            {/* <Navbar /> */}
             <Inventory />
         </div>
     )

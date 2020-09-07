@@ -67,10 +67,10 @@ ipcMain.on("Addusername", (event, arg) => {
     let userfound = false;
     let user = [username, password];
     connection.query(DB.searchuser, [username], (err, result) => {
-      console.log(result);
+      // console.log(result);
       if (result.length != 0) {
         event.reply("Userexists", "User Already Exists");
-        console.log("User found");
+        // console.log("User found");
       } else {
         connection.query(DB.adduser, user, (err) => {
           if (err) {
@@ -86,7 +86,7 @@ ipcMain.on("Addusername", (event, arg) => {
 
 ipcMain.on("Userlogin", (event, arg) => {
   // createconnection()
-  console.log(arg);
+  // console.log(arg);
   var login;
   connection.query(DB.searchuser, [arg.username], (err, result) => {
     if (err) {
@@ -105,82 +105,147 @@ ipcMain.on("Userlogin", (event, arg) => {
   // endconnection()
 });
 
-ipcMain.on("AddItems",async (event, arg) => {
+ipcMain.on("AddItems", async (event, arg) => {
   console.log(arg);
   item = [arg.itemname, arg.description, arg.category, arg.origin];
-  connection.query(DB.additem,item,(err) => {
+  connection.query(DB.additem, item, (err) => {
     if (err) {
       console.log(err);
     } else {
-      console.log("Item added")
-      
+      // console.log("Item added")
       // event.reply("ItemAdded", "Successfully Added Item");
     }
-  })
+  });
 });
-ipcMain.on("ItemsQuery",async (event)=> {
- connection.query(DB.viewitems,(err,result) => {
-  event.sender.send("ItemsQuerySuccessful", result);
-  
-  //  console.log(result[0].itemname,"hhh")
-  //  console.log(result[1])
- })
-})
-ipcMain.on("DeleteItem",(event,arg)=> {
-  console.log(arg)
-  itemid = [arg]
-  connection.query(DB.deleteitems,itemid,(err) => {
-    if(err){
-      console.log(err)
-    }
-    else{
+ipcMain.on("ItemsQuery", async (event) => {
+  connection.query(DB.viewitems, (err, result) => {
+    event.sender.send("ItemsQuerySuccessful", result);
+
+    //  console.log(result[0].itemname,"hhh")
+    //  console.log(result[1])
+  });
+});
+ipcMain.on("DeleteItem", (event, arg) => {
+  // console.log(arg)
+  itemid = [arg];
+  connection.query(DB.deleteitems, itemid, (err) => {
+    if (err) {
+      console.log(err);
+    } else {
       event.sender.send("DeletedSuccessfully");
-      console.log("Deleted Successfully")
+      // console.log("Deleted Successfully")
     }
-  })
-})
-ipcMain.on("EditItemQuery",  (event,arg)=>{
-  if(arg){
-    console.log(arg)
-    itemid = [arg]
-    connection.query(DB.selecteditem,itemid,(err,result)=>{
-      if(err){
-        console.log(err)
-      }
-      else{
+  });
+});
+ipcMain.on("EditItemQuery", (event, arg) => {
+  if (arg) {
+    // console.log(arg)
+    itemid = [arg];
+    connection.query(DB.selecteditem, itemid, (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
         event.sender.send("ItemsEditQuerySuccessful", result);
       }
-    })
+    });
   }
-})
-ipcMain.on("EditItem",(event,arg) => {
-  query = [arg.itemname,arg.description,arg.category,arg.origin,arg.itemID]
- connection.query(DB.updateitem,query,(err)=>{
-   if(err){
-     console.log(err)
-   }
-   else{
-     console.log("Updated")
-   }
- })
-})
-ipcMain.on("SearchItems" ,(event,arg) => {
-  console.log(arg)
-  connection.query(DB.searchItem,arg,(err,result) => {
-    if(err){
-      console.log(err)
+});
+ipcMain.on("EditItem", (event, arg) => {
+  query = [arg.itemname, arg.description, arg.category, arg.origin, arg.itemID];
+  connection.query(DB.updateitem, query, (err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      //  console.log("Updated")
     }
-    else{
+  });
+});
+ipcMain.on("SearchItems", (event, arg) => {
+  // console.log(arg)
+  connection.query(DB.searchItem, arg, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
       event.sender.send("SearchItemResult", result);
     }
-  })
-})
+  });
+});
+
+ipcMain.on("AddInventory", (event, arg) => {
+  query = [
+    arg.lotno,
+    arg.date,
+    arg.noofbags,
+    arg.noofbags,
+    arg.totalweight,
+    arg.price,
+    arg.labourexpense,
+    arg.transportexpense,
+    arg.cartonexpense,
+    arg.otherexpense,
+    arg.totalexpense,
+    arg.ItemID,
+  ];
+  // connection.query(DB.lotnosearch,[arg.lotno],(err,result) => {
+  //   if(result.length == 0){
+  connection.query(DB.addinventory, query, (err) => {
+    if (err) {
+      console.log(err);
+    } else {
+    }
+  });
+  // }
+  //   else{
+  //     event.sender.send("Lotnoerror","LotNo already exists")
+  //   }
+  // })
+});
+ipcMain.on("InventoryQuery", (event, err) => {
+  connection.query(DB.YYYYinventoryview, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      event.sender.send("InventoryQuerySuccessful", result);
+    }
+  });
+});
+ipcMain.on("DeleteInventory", (event, arg) => {
+  connection.query(DB.inventorydelete, [arg], (err) => {
+    if (err) {
+      console.log(err);
+    }
+  });
+});
+ipcMain.on("EditInventory", (event, arg) => {
+  console.log(arg);
+  query = [
+    arg.lotno,
+    arg.date,
+    arg.noofbags,
+    arg.leftbags,
+    arg.price,
+    arg.totalweight,
+    arg.labourexpense,
+    arg.transportexpense,
+    arg.cartonexpense,
+    arg.otherexpense,
+    arg.totalexpense,
+    arg.inventID,
+  ];
+  connection.query(DB.inventoryupdate, query, (err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log("Updated");
+    }
+  });
+});
 async function createconnection() {
   connection.connect();
-  console.log("Connection Succsessful");
+  // console.log("Connection Succsessful");
 }
 
 function endconnection() {
   connection.end();
-  console.log("Connection Ended");
+  // console.log("Connection Ended");
 }

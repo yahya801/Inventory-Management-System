@@ -12,16 +12,19 @@
 .addbutton {
     margin: 10px
 }
-
+.itemname:hover{
+    cursor: pointer;
+    /* background: #79a177; */
+}
 .itembox {
     margin-top: 10px;
     margin-left: 200px;
     height: auto;
     padding-left: 20px;
-    min-height: 800px;
+    max-height: 575px;
     width: 82.5%;
     background-color: white;
-    overflow: auto;
+    /* overflow: auto; */
     position: fixed;
    
 }

@@ -26,7 +26,8 @@ function Searchtable() {
   const [Deleteitem, SetDeleteitem] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(5);
-
+  const [redirectsearch,Setredirectsearch] = useState(false)
+const [nosearch,Setnosearch] = useState("")
   let itemModalClose = () => {
     SetitemshowModal(false);
   };
@@ -51,8 +52,8 @@ function Searchtable() {
         return Item.ItemID;
       })
       .indexOf(itemid);
-    console.log(removeindex);
-    console.log(itemname);
+    // console.log(removeindex);
+    // console.log(itemname);
     SetDeleteitem(searchitems[removeindex]);
     Setdeletemodalshow(true);
   };
@@ -62,7 +63,7 @@ function Searchtable() {
         return Item.ItemID;
       })
       .indexOf(itemid);
-    console.log(itemnameindex);
+    // console.log(itemnameindex);
     // console.log(items[itemnameindex])
     SetitemshowModal(true);
     Setitemview(searchitems[itemnameindex]);
@@ -71,17 +72,27 @@ function Searchtable() {
     // Setdeletemodalshow(true);
   };
   const searchclick = () => {
-    if (search == "") {
+    if (search == []) {
       Setemptysearch(true);
     } else {
       ipcRenderer.send("SearchItems", search);
 
       ipcRenderer.on("SearchItemResult", (err, result) => {
+          if(result.length ===  0){
+              Setnosearch("No Item Found")
+              
+          }
+          else{
+            //   console.log(result)
         Setsearchitems(result);
-        console.log(result);
-      });
+        // console.log(result);}
+      }
+        // Setredirectsearch(true)
+
+})
     }
-  };
+}
+  
   useEffect(() => {
     Setsearch(answer_array[1]);
     const itemname = answer_array[1];
@@ -89,8 +100,14 @@ function Searchtable() {
     ipcRenderer.send("SearchItems", itemname);
 
     ipcRenderer.on("SearchItemResult", (err, result) => {
+        if(result === ""){
+            Setnosearch("No Item Found")
+            
+        }
+        else{
       Setsearchitems(result);
-      console.log(result);
+    //   console.log(result);
+        }
     });
     // console.log(answer_array)
   }, []);
@@ -133,6 +150,7 @@ function Searchtable() {
                 </tr>
               </thead>
               <tbody>
+                  {nosearch}
                 {currentitems.map((Item, index) => (
                   <tr Key={Item.ItemID}>
                     <td>{index + 1}</td>
@@ -202,6 +220,9 @@ function Searchtable() {
         </div>
         
       </div>
+      {/* {redirectsearch ? 
+        <Redirect to={`/itemsearch?itemname=${search}`} />
+       : null} */}
       {emptysearch ? <Redirect to="/items" /> : null}
     </div>
   );
