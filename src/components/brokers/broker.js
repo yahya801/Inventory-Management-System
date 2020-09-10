@@ -1,14 +1,15 @@
 import React from "react";
-import styles from "./inventory.module.css";
-function Inventory() {
+import styles from "./broker.module.css";
+
+function Broker() {
   return (
-    <div style={{paddingLeft:"10px"}}>
+    <div style={{ paddingLeft: "10px" }}>
       <div className={styles.topbox}>
-        <h3>Manage Inventory </h3>
+        <h3>Manage Brokers </h3>
         {/* <button className={styles.addbutton}  >Add Item</button> */}
       </div>
     </div>
   );
 }
 
-export default Inventory;
+export default Broker;

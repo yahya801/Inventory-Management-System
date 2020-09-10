@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Container, Button, ButtonToolbar } from "react-bootstrap";
-import styles from "./itemstop.module.css";
+import styles from "./inventory.module.css";
 import Inventorytop from "./inventorytop";
 import Table from "react-bootstrap/Table";
 import Addinventory from "./addinventory";

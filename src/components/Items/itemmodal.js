@@ -48,8 +48,10 @@ function ItemModal(props) {
         </Modal.Header>
         <Modal.Body>
           <h4>Add New Item Form</h4>
-          <div className={styles.form}>
-            <form>
+
+          <form>
+            <div>
+              <label>Itemname</label>
               <input
                 className={styles.inputtext}
                 type="text"
@@ -58,6 +60,10 @@ function ItemModal(props) {
                 onChange={(e) => Setitemname(e.target.value)}
                 placeholder="itemname"
               />
+            </div>
+            <div>
+              <label>Description</label>
+
               <input
                 className={styles.inputtext}
                 type="text"
@@ -66,6 +72,8 @@ function ItemModal(props) {
                 onChange={(e) => Setdescription(e.target.value)}
                 placeholder="description"
               />
+            </div>
+            <div>
               <label required>
                 Pick your Category:
                 <select
@@ -79,6 +87,9 @@ function ItemModal(props) {
                   <option value="Spices">Spices</option>
                 </select>
               </label>
+            </div>
+            <div>
+              <label>Origin</label>
               <input
                 className={styles.inputtext}
                 type="text"
@@ -87,13 +98,13 @@ function ItemModal(props) {
                 onChange={(e) => Setorigin(e.target.value)}
                 placeholder="Origin"
               />
-              {error}
-              <Button onClick={(e) => handleClick(e)}>Submit</Button>
-            </form>
-            {redirect ? <Redirect to="/items" /> : null}
-          </div>
+            </div>
+            {error}
+          </form>
+          {redirect ? <Redirect to="/items" /> : null}
         </Modal.Body>
         <Modal.Footer>
+          <Button onClick={(e) => handleClick(e)}>Submit</Button>
           <Button onClick={props.onHide}>Close</Button>
         </Modal.Footer>
       </Modal>

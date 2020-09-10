@@ -240,6 +240,47 @@ ipcMain.on("EditInventory", (event, arg) => {
     }
   });
 });
+ipcMain.on("AddClient", (event, arg) => {
+  query = [arg.clientname, arg.shopaddress, arg.contact];
+  connection.query(DB.addclient, query, (err) => {
+    if (err) {
+      console.log(err);
+    }
+  });
+});
+ipcMain.on("ClientView", (event) => {
+  connection.query(
+    DB.viewclient,
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        // console.log(result)
+        event.sender.send("ClientViewResult", result);
+      }
+    },
+    []
+  );
+});
+
+ipcMain.on("ViewBroker", (event) => {
+  connection.query(DB.viewbroker, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      event.sender.send("BrokerViewResult", result);
+    }
+  });
+});
+
+ipcMain.on("AddBroker",(event,arg) => {
+  query=[arg.brokername,arg.brokerinfo,arg.contact]
+  connection.query(DB.addbroker,query,(err) => {
+    if(err){
+      console.log(err)
+    }
+  })
+})
 async function createconnection() {
   connection.connect();
   // console.log("Connection Succsessful");

@@ -14,7 +14,7 @@ function sidebar(props) {
         <Link className={props.home ? " fa fa-user active " : "fa fa-user"} to="/dashboard"> Home</Link>
         <Link className={props.bill ? "fa fa-users active" : "fa fa-users"} to="/bill">   Bill</Link>
         <Link className={props.inventory? "fa fa-shopping-basket active" : "fa fa-shopping-cart"} to="/inventory"> Inventory</Link>
-        <Link className={props.client ? "active" : null} to="/client"> Client</Link>
+        <Link className={props.clients ? "active" : null} to="/clients"> Client</Link>
         <Link className={props.products ? "active" : null} to="/products"> Products</Link>
         <Link className={props.brokers ? "active" : null} to="/brokers"> Brokers</Link>
         <Link className={props.sales ? "active" : null} to="/sales"> Sales </Link>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Button, Row, Col, Form } from "react-bootstrap";
-import styles from "./itemstop.module.css";
+import styles from "./inventory.module.css";
 import { Redirect } from "react-router-dom";
 const { ipcRenderer } = window.require("electron");
 function Addinventory(props) {
@@ -132,57 +132,74 @@ function Addinventory(props) {
           {/* <h4>Centered Modal</h4> */}
           {/* <div className={styles.form}> */}
           <form>
-            <label>
-              <select value={itemname} onChange={(e) => itemnamechange(e)}>
-                <option value="Select">Select</option>
-                {item.map((item, index) => (
-                  <option key={index} value={index}>
-                    {item.itemname}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <input
-              className={styles.inputtext}
-              type="date"
-              value={date}
-              required
-              onChange={(e) => Setdate(e.target.value)}
-              // placeholder="Date"
-            />
-            <input
-              className={styles.inputtext}
-              type="text"
-              value={lotno}
-              required
-              onChange={(e) => Setlotno(e.target.value)}
-              placeholder="LotNo"
-            />
-
-            <input
-              className={styles.inputtext}
-              type="number"
-              value={noofbags}
-              required
-              onChange={(e) => Setnoofbags(e.target.value)}
-              placeholder="No of Bags"
-            />
-            <input
-              className={styles.inputtext}
-              type="number"
-              value={totalweight}
-              required
-              onChange={(e) => Settotalweight(e.target.value)}
-              placeholder="Total Weight"
-            />
-            <input
-              className={styles.inputtext}
-              type="text"
-              value={category}
-              // required
-              // onChange={(e) => Settotalweight(e.target.value)}
-              placeholder="category"
-            />
+            <div>
+              <label>
+                Select Itemname
+                <select
+                  className={styles.inputtext}
+                  value={itemname}
+                  onChange={(e) => itemnamechange(e)}
+                >
+                  <option value="Select">Select</option>
+                  {item.map((item, index) => (
+                    <option key={index} value={index}>
+                      {item.itemname}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label>Date</label>
+              <input
+                className={styles.inputtext}
+                type="date"
+                value={date}
+                required
+                onChange={(e) => Setdate(e.target.value)}
+                // placeholder="Date"
+              />
+            </div>
+            <div>
+              <label>LotNo</label>
+              <input
+                className={styles.inputtext}
+                type="text"
+                value={lotno}
+                required
+                onChange={(e) => Setlotno(e.target.value)}
+                placeholder="LotNo"
+              />
+              <label> No of Bags</label>
+              <input
+                className={styles.inputtext}
+                type="number"
+                value={noofbags}
+                required
+                onChange={(e) => Setnoofbags(e.target.value)}
+                placeholder="No of Bags"
+              />
+            </div>
+            <div>
+              <label>Total Weight(KG)</label>
+              <input
+                className={styles.inputtext}
+                type="number"
+                value={totalweight}
+                required
+                onChange={(e) => Settotalweight(e.target.value)}
+                placeholder="Total Weight"
+              />
+              <label>Category</label>
+              <input
+                className={styles.inputtext}
+                type="text"
+                value={category}
+                // required
+                // onChange={(e) => Settotalweight(e.target.value)}
+                placeholder="category"
+              />
+            </div>
+            <div>
+              <label>Origin</label>
             <input
               className={styles.inputtext}
               type="textr"
@@ -191,6 +208,7 @@ function Addinventory(props) {
               // onChange={(e) => Settotalweight(e.target.value)}
               placeholder="origin"
             />
+            <label>Price/KG</label>
             <input
               className={styles.inputtext}
               type="number"
@@ -199,6 +217,9 @@ function Addinventory(props) {
               onChange={(e) => Setprice(e.target.value)}
               placeholder="Total Price"
             />
+            </div>
+            <div>
+              <label>Labour Cost</label>
             <input
               className={styles.inputtext}
               type="number"
@@ -207,6 +228,7 @@ function Addinventory(props) {
               onChange={(e) => Setlabourexpense(e.target.value)}
               placeholder="Labour Expense"
             />
+            <label>Transport Cost</label>
             <input
               className={styles.inputtext}
               type="number"
@@ -215,6 +237,9 @@ function Addinventory(props) {
               onChange={(e) => Settransportexpense(e.target.value)}
               placeholder="Transport Expense"
             />
+            </div>
+            <div>
+              <label>Packaging Cost</label>
             <input
               className={styles.inputtext}
               type="number"
@@ -223,6 +248,7 @@ function Addinventory(props) {
               onChange={(e) => Setcartonexpense(e.target.value)}
               placeholder="Packing Expense"
             />
+            <label>Other Costs</label>
             <input
               className={styles.inputtext}
               type="number"
@@ -231,6 +257,7 @@ function Addinventory(props) {
               onChange={(e) => Setotherexpense(e.target.value)}
               placeholder="Other Expense"
             />
+            </div>
           </form>
           <p>Total Expense : {totalexpense.toLocaleString()}</p>
           {error}

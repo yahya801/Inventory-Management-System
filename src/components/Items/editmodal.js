@@ -26,11 +26,11 @@ function Editmodal(props) {
   };
   const Setarray = () => {
     // setTimeout(() => {
-      Setitemname(props.passitem.itemname);
-      SetItemId(props.passitem.ItemID);
-      Setdescription(props.passitem.description);
-      SetCategory(props.passitem.category);
-      Setorigin(props.passitem.origin);
+    Setitemname(props.passitem.itemname);
+    SetItemId(props.passitem.ItemID);
+    Setdescription(props.passitem.description);
+    SetCategory(props.passitem.category);
+    Setorigin(props.passitem.origin);
     // }, 1000);
   };
   useEffect(() => {
@@ -51,45 +51,56 @@ function Editmodal(props) {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-         <div className={styles.form}>
+          <div className={styles.form}>
             <form>
-              <input
-                className={styles.inputtext}
-                type="text"
-                value={itemname}
-                required
-                onChange={(e) => Setitemname(e.target.value)}
-                placeholder="itemname"
-              />
-              <input
-                className={styles.inputtext}
-                type="text"
-                value={description}
-                required
-                onChange={(e) => Setdescription(e.target.value)}
-                placeholder="description"
-              />
-              <label required>
-                Pick your Category:
-                <select
-                  value={category}
-                  onChange={(e) => SetCategory(e.target.value)}
-                >
-                  <option value="Select" default>
-                    Select
-                  </option>
-                  <option value="Dry-Fruit">Dry-Fruit</option>
-                  <option value="Spices">Spices</option>
-                </select>
-              </label>
-              <input
-                className={styles.inputtext}
-                type="text"
-                value={origin}
-                required
-                onChange={(e) => Setorigin(e.target.value)}
-                placeholder="Origin"
-              />
+              <div>
+                <label>Itemname</label>
+                <input
+                  className={styles.inputtext}
+                  type="text"
+                  value={itemname}
+                  required
+                  onChange={(e) => Setitemname(e.target.value)}
+                  placeholder="itemname"
+                />
+              </div>
+              <div>
+                <label>Description</label>
+                <input
+                  className={styles.inputtext}
+                  type="text"
+                  value={description}
+                  required
+                  onChange={(e) => Setdescription(e.target.value)}
+                  placeholder="description"
+                />
+              </div>
+              <div>
+                <label required>
+                  Pick your Category:
+                  <select
+                    value={category}
+                    onChange={(e) => SetCategory(e.target.value)}
+                  >
+                    <option value="Select" default>
+                      Select
+                    </option>
+                    <option value="Dry-Fruit">Dry-Fruit</option>
+                    <option value="Spices">Spices</option>
+                  </select>
+                </label>
+              </div>
+              <div>
+                <label>Origin</label>
+                <input
+                  className={styles.inputtext}
+                  type="text"
+                  value={origin}
+                  required
+                  onChange={(e) => Setorigin(e.target.value)}
+                  placeholder="Origin"
+                />
+              </div>
               {/* {error} */}
               <button onClick={(e) => handleClick(e)}>Submit</button>
             </form>

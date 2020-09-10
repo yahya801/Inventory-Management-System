@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Button, Row, Col, Form } from "react-bootstrap";
-import styles from "./itemstop.module.css";
+import styles from "./inventory.module.css";
 import moment from "moment";
 import { Redirect } from "react-router-dom";
 const { ipcRenderer } = window.require("electron");
