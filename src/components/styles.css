@@ -2,7 +2,7 @@
 .sidebar {
   margin: 0;
   padding: 0;
-  width: 200px;
+  width: 180px;
   background-color: #0D1110;
   position: fixed;
   height: 100%;
@@ -17,7 +17,8 @@
 .sidebar a {
   display: block;
   color: white;
-  padding: 16px;
+   padding: 6px 8px 6px 16px;
+  height: 40px;;
   text-decoration: none;
 }
 
@@ -34,11 +35,40 @@
 }
 
 /* Page content. The value of the margin-left property should match the value of the sidebar's width property */
-div.content {
+/* div.content {
   margin-left: 200px;
   padding: 1px 16px;
-  height: 1000px;
+  height: 100px;
+} */
+.dropdown-container {
+  display: none;
+  background-color: #262626;
+  padding-left: 8px;
+} 
+.dropdown-btn {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  
+  font-size: 16px;
+  color: #818181;
+  display: block;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  outline: none;
 }
+.dropdown-btn:hover {
+  background-color: #1c2b27;
+  color: #f1f1f1;
+}
+.active {
+  /* background-color: green; */
+   font-size: 16px;
+  color: white;
+}
+
 
 /* button{
   margin-left: 200px;

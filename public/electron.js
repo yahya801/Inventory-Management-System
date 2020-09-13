@@ -1,5 +1,5 @@
 const electron = require("electron");
-const { ipcMain } = require("electron");
+const { ipcMain,dialog } = require("electron");
 const bcrypt = require("bcrypt");
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
@@ -107,7 +107,7 @@ ipcMain.on("Userlogin", (event, arg) => {
 
 ipcMain.on("AddItems", async (event, arg) => {
   console.log(arg);
-  item = [arg.itemname, arg.description, arg.category, arg.origin];
+  item = [arg.productname, arg.description, arg.category, arg.origin];
   connection.query(DB.additem, item, (err) => {
     if (err) {
       console.log(err);
@@ -127,10 +127,16 @@ ipcMain.on("ItemsQuery", async (event) => {
 });
 ipcMain.on("DeleteItem", (event, arg) => {
   // console.log(arg)
+  let options  = {
+    buttons: ["Yes","No","Cancel"],
+    message: "Do you really want to quit?"
+   }
   itemid = [arg];
   connection.query(DB.deleteitems, itemid, (err) => {
     if (err) {
       console.log(err);
+      let response = dialog.showMessageBox(options)
+console.log(response),dialog
     } else {
       event.sender.send("DeletedSuccessfully");
       // console.log("Deleted Successfully")
@@ -151,7 +157,7 @@ ipcMain.on("EditItemQuery", (event, arg) => {
   }
 });
 ipcMain.on("EditItem", (event, arg) => {
-  query = [arg.itemname, arg.description, arg.category, arg.origin, arg.itemID];
+  query = [arg.productname, arg.description, arg.category, arg.origin, arg.itemID];
   connection.query(DB.updateitem, query, (err) => {
     if (err) {
       console.log(err);
@@ -273,14 +279,30 @@ ipcMain.on("ViewBroker", (event) => {
   });
 });
 
-ipcMain.on("AddBroker",(event,arg) => {
-  query=[arg.brokername,arg.brokerinfo,arg.contact]
-  connection.query(DB.addbroker,query,(err) => {
-    if(err){
-      console.log(err)
+ipcMain.on("AddBroker", (event, arg) => {
+  query = [arg.brokername, arg.brokerinfo, arg.contact];
+  connection.query(DB.addbroker, query, (err) => {
+    if (err) {
+      console.log(err);
     }
-  })
-})
+  });
+});
+ipcMain.on("DeleteBroker", (event, arg) => {
+  // query = [arg.brokerID]
+  connection.query(DB.brokerdelete, [arg], (err) => {
+    if (err) {
+      console.log(err);
+    }
+  });
+});
+ipcMain.on("EditBroker", (event, arg) => {
+  query = [arg.brokername, arg.brokerinfo, arg.contact, arg.brokerID];
+  connection.query(DB.brokerupdate, query, (err) => {
+    if (err) {
+      console.log(err);
+    }
+  });
+});
 async function createconnection() {
   connection.connect();
   // console.log("Connection Succsessful");

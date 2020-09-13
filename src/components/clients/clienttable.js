@@ -4,15 +4,21 @@ import Client from "./client";
 import { Container, Button, ButtonToolbar } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
 import Addclient from "./addclient";
+import Deleteclient from './deleteclient'
 const { ipcRenderer } = window.require("electron");
 
 function Clienttable() {
   let addModalClose = () => {
     SetaddModal(false);
   };
+  let deleteModalClose = () => {
+    SetdeleteModal(false)
+  }
   const [addModal, SetaddModal] = useState("");
   const [clients, Setclients] = useState([]);
   const [listener, Setlistener] = useState(false);
+  const [deleteModal,SetdeleteModal] = useState(false)
+  const [deleteclient,Setdeleteclient] = useState("")
 
   useEffect(() => {
     ipcRenderer.send("ClientView");
@@ -23,7 +29,17 @@ function Clienttable() {
         Setclients(result);
       });
     }
-  },[]);
+  });
+  const handledeleteClick =(clientID)=> {
+    var clientindex = clients
+    .map(function (client) {
+      return client.clientID;
+    })
+    .indexOf(clientID);
+    Setdeleteclient(clients[clientindex])
+    SetdeleteModal(true)
+  }
+
   return (
     <div>
       <Client />
@@ -87,7 +103,7 @@ function Clienttable() {
                       <Button
                         // style={{ height: "40px"  }}
                         variant="danger"
-                        // onClick={() => handledeleteClick(invent.inventID)}
+                        onClick={() => handledeleteClick(client.clientID)}
                       >
                         Delete
                       </Button>
@@ -102,18 +118,18 @@ function Clienttable() {
           postsPerPage={postsPerPage}
           totalPosts={inventory.length}
           paginate={paginate}
-        />
-        <Viewmodal
+        /> */}
+        {/* <Viewmodal
           passitem={inventoryview}
           show={inventoryModal}
           onHide={viewModalClose}
-        />
-        <Deletemodal
-          passitem={deleteinvent}
+        /> */}
+        <Deleteclient
+          passitem={deleteclient}
           show={deleteModal}
           onHide={deleteModalClose}
         />
-         <Editmodal
+         {/* <Editmodal
           passitem={editinvent}
           show={editModal}
           onHide={editModalClose}

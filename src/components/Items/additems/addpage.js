@@ -1,65 +1,50 @@
 import React, { useState } from "react";
-import { Modal, Button, Row, Col, Form } from "react-bootstrap";
-import styles from "./itemstop.module.css";
-import { Redirect } from "react-router-dom";
+import styles from "../itemstop.module.css";
 const { ipcRenderer } = window.require("electron");
-function ItemModal(props) {
-  const [itemname, Setitemname] = useState("");
+
+function Addpage() {
+  const [productname, Setproductname] = useState("");
   const [description, Setdescription] = useState("");
   const [category, SetCategory] = useState("Select");
   const [origin, Setorigin] = useState("");
-  const [error, Seterror] = useState("");
-  const [redirect, Setredirect] = useState("");
   const handleClick = (evt) => {
     evt.preventDefault();
     console.log("Form Submit");
-    const productname = itemname
     const array = {
       productname,
       description,
       category,
       origin,
     };
-    if (!itemname || !description || !origin || category == "Select") {
-      Seterror("Fields input wrong");
+    if (!productname || !description || !origin || category == "Select") {
+    //   Seterror("Fields input wrong");
     } else {
       ipcRenderer.send("AddItems", array);
-      Setitemname("");
+      Setproductname("");
       Setdescription("");
       SetCategory("Select");
       Setorigin("");
-      Seterror("");
-      props.onHide();
+    //   Seterror("");
+      
     }
   };
-
   return (
-    <div>
-      <Modal
-        {...props}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-        data-backdrop="false"
-      >
-        <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">
-            Add New Item
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <h4>Add New Item Form</h4>
-
+    <div style={{ paddingLeft: "10px" }}>
+      <div className={styles.itembox}>
+        <div>
+          <h3>Products</h3>
+        </div>
+        <div className={styles.borderbox}>
+          <h4>New Products</h4>
           <form>
             <div>
-              <label>Itemname</label>
+              <label>Product Name</label>
               <input
                 className={styles.inputtext}
                 type="text"
-                value={itemname}
-                required
-                onChange={(e) => Setitemname(e.target.value)}
-                placeholder="itemname"
+                value={productname}
+                onChange={(e) => Setproductname(e.target.value)}
+                placeholder="Product Name"
               />
             </div>
             <div>
@@ -100,17 +85,15 @@ function ItemModal(props) {
                 placeholder="Origin"
               />
             </div>
-            {error}
+
+            <button type="submit" onClick={(e) => handleClick(e)}>
+              Submit
+            </button>
           </form>
-          {redirect ? <Redirect to="/items" /> : null}
-        </Modal.Body>
-        <Modal.Footer>
-          <Button onClick={(e) => handleClick(e)}>Submit</Button>
-          <Button onClick={props.onHide}>Close</Button>
-        </Modal.Footer>
-      </Modal>
+        </div>
+      </div>
     </div>
   );
 }
 
-export default ItemModal;
+export default Addpage;

@@ -18,15 +18,20 @@ module.exports = {
  lotnosearch: "SELECT * FROM `inventory` WHERE `lotno` = ?",
  inventoryview: "SELECT `inventory`.*,`items`.`itemname`,`items`.`description`,`items`.`origin`,`items`.`category` FROM `inventory` INNER JOIN `items` ON `inventory`.`ItemID` = `items`.`ItemID` ORDER BY `inventory`.`date` DESC",
  YYYYinventoryview: "SELECT `inventory`.*,`items`.`itemname`,`items`.`description`,`items`.`origin`,`items`.`category` FROM `inventory` INNER JOIN `items` ON `inventory`.`ItemID` = `items`.`ItemID` AND YEAR(`inventory`.`date`) = YEAR(CURDATE()) ORDER BY `inventory`.`date` DESC",
+ pastinventoryview: "SELECT `inventory`.*,`items`.`itemname`,`items`.`description`,`items`.`origin`,`items`.`category` FROM `inventory` INNER JOIN `items` ON `inventory`.`ItemID` = `items`.`ItemID` AND YEAR(`inventory`.`date`) = ? ORDER BY `inventory`.`date` DESC",
  inventorydelete: "DELETE FROM `inventory` WHERE `inventID` = ?",
  inventoryupdate: "UPDATE `inventory` SET `lotno` = ?,`date`=?,`noofbags`=?,`leftbags`=?,`priceperkg`=?,`totalweight`=?,`labourexpense`=?,`transportexpense`=?,`cartonexpense`=?,`otherexpense`=?,`totalexpense`=? WHERE `inventID`= ?",
 //client
 clienttable: "CREATE TABLE `client` (`clientID` int NOT NULL AUTO_INCREMENT, `clientname` varchar(255) NOT NULL, `shopaddress` varchar(255),`contact` varchar(255),PRIMARY KEY (`clientID`)) ",
 addclient: "INSERT INTO `client` (`clientname`,`shopaddress`,`contact`) VALUES (?,?,?)",
 viewclient: "SELECT *, CONCAT('CID',LPAD(`clientID`, 4, '0')) AS `ID` FROM `client`",
+clientupdate: "UPDATE `client` Set `clientname`=?,`shopeaddress`=?,`contact`=? WHERE `clientID`=?",
+clientdelete: "DELETE FROM `client` WHERE `clientID` = ?",
 
 //broker
 brokertable: "CREATE TABLE `broker` (`brokerID` int NOT NULL AUTO_INCREMENT, `brokername` varchar(255) NOT NULL,`brokerinfo` varchar(255),`contact` varchar(255),PRIMARY KEY(`brokerID`))",
 viewbroker: "SELECT *, CONCAT('BID',LPAD(`brokerID`,4,'0')) AS `ID` FROM `broker`",
 addbroker: "INSERT INTO `broker`(`brokername`,`brokerinfo`,`contact`) VALUES (?,?,?)",
+brokerupdate: "UPDATE `broker` SET `brokername`=?, `brokerinfo` = ? , `contact`=? WHERE `brokerID` = ?",
+brokerdelete: "DELETE FROM `broker` WHERE `brokerID` = ?"
 };

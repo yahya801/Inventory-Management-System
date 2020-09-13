@@ -18,16 +18,27 @@
     margin-left: 200px;
     height: auto;
     padding-left: 20px;
-    max-height: 575px;
+    min-height: 400px;
     width: 82.5%;
     background-color: white;
     /* overflow: auto; */
     position: fixed;
-   
+
 }
-h2{
-    position:  sticky;
+
+.borderbox{
+
+    border: 1px solid black;
+    margin: 10px;
+    padding: 5px;
+height: 330px;
 }
+/* h3 {
+
+    border-bottom: 1px solid black;
+    padding-bottom: 5px;
+
+} */
 
 /* table {
     padding-top: 50px;
@@ -42,8 +53,8 @@ h2{
 th,
 td {
     text-align: left;
-   padding: 10px;
-   /* font-size: medium; */
+    padding: 10px;
+    /* font-size: medium; */
     /* border-style: solid; */
 }
 
@@ -73,7 +84,7 @@ tr:nth-child(even) {
     margin: 0 auto 100px;
     padding: 45px;
     text-align: center;
-  
+
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 }
 
@@ -89,7 +100,8 @@ tr:nth-child(even) {
     box-sizing: border-box;
 
 }
-.editbox{
+
+.editbox {
     height: 30px;
     width: 20%;
     color: white;
@@ -97,10 +109,12 @@ tr:nth-child(even) {
     border: 2px solid black;
     /* display: none; */
 }
-.editbox2{
+
+.editbox2 {
     display: none;
 }
-.addbox{
+
+.addbox {
     height: 30px;
     width: 20%;
     color: white;
@@ -109,10 +123,11 @@ tr:nth-child(even) {
     /* display: none; */
 }
 
-.addbox2{
+.addbox2 {
     display: none;
 }
-.deletebox{
+
+.deletebox {
     height: 30px;
     width: 20%;
     color: white;
@@ -120,42 +135,47 @@ tr:nth-child(even) {
     border: 2px solid black;
     /* display: none; */
 }
+
 .deletebox2 {
     display: none;
 }
+
 .pageitem {
-   
-    
+
+
     /*  */
 }
 
-.pagination{
+.pagination {
     display: flex;
     flex-wrap: wrap;
     /* display: inline; */
     /*  */
     list-style: none;
     padding: 8px 16px;
-   
+
     /* border: 2px solid black; */
 }
 
-.page_link{
+.page_link {
     /* display: inline-block; */
- 
+
     /* background: #ea3a53; */
     border: 1px solid blue;
     margin: 2px;
     padding: 5px
 }
+
 .page_linkactive {
     background: #79a177;
 }
-.page_link:hover{
+
+.page_link:hover {
     background: #79a177;
     cursor: pointer;
 }
-.itemname:hover{
+
+.itemname:hover {
     cursor: pointer;
     /* background: #79a177; */
 }

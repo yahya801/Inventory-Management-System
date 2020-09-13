@@ -2,13 +2,21 @@ import React, { useState, useEffect } from "react";
 import { Modal, Button, Row, Col, Form } from "react-bootstrap";
 import styles from "./broker.module.css";
 const { ipcRenderer } = window.require("electron");
-function Addbroker(props) {
+
+function Editbroker(props) {
   const [brokername, Setbrokername] = useState("");
   const [brokerinfo, Setbrokerinfo] = useState("");
   const [contact, Setcontact] = useState("");
   const [error, Seterror] = useState("");
+  const brokerID = props.passitem.brokerID;
 
-  const Handlesubmit = () => {
+  useEffect(() => {
+    Setbrokername(props.passitem.brokername);
+    Setbrokerinfo(props.passitem.brokerinfo);
+    Setcontact(props.passitem.contact);
+  }, [brokerID]);
+
+  const HandleClick = () => {
     if (!brokername || !brokerinfo || !contact) {
       Seterror("Fields not filled");
     } else {
@@ -16,8 +24,11 @@ function Addbroker(props) {
         brokername,
         brokerinfo,
         contact,
+        brokerID
       };
-      ipcRenderer.send("AddBroker", array)
+
+      ipcRenderer.send("EditBroker",array)
+      props.onHide()
     }
   };
   return (
@@ -28,9 +39,12 @@ function Addbroker(props) {
       centered
     >
       <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">Add Broker</Modal.Title>
+        <Modal.Title id="contained-modal-title-vcenter">
+          Modal heading
+        </Modal.Title>
       </Modal.Header>
       <Modal.Body>
+        <h4>Centered Modal</h4>
         <form>
           <label>Broker Name</label>
           <input
@@ -59,11 +73,11 @@ function Addbroker(props) {
         </form>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={() => Handlesubmit()}>Close</Button>
+        <Button onClick={() => HandleClick()}>Submit</Button>
         <Button onClick={props.onHide}>Close</Button>
       </Modal.Footer>
     </Modal>
   );
 }
 
-export default Addbroker;
+export default Editbroker;

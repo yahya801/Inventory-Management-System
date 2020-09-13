@@ -4,10 +4,20 @@ import styles from "./broker.module.css";
 import { Container, Button, ButtonToolbar } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
 import Addbroker from "./addbroker";
+import Deletebroker from "./deletebroker";
+import Pagination from "./pagination";
+import Editbroker from "./editbroker";
+
 const { ipcRenderer } = window.require("electron");
 function Brokertable() {
   const [addModal, SetaddModal] = useState(false);
+  const [Deletemodal, SetDeleteModal] = useState(false);
+  const [Editmodal, SetEditmodal] = useState(false);
   const [brokers, Setbroker] = useState([]);
+  const [deletebroker, Setdeletebroker] = useState("");
+  const [editbroker, Seteditbroker] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postsPerPage] = useState(7);
 
   useEffect(() => {
     ipcRenderer.send("ViewBroker");
@@ -16,9 +26,44 @@ function Brokertable() {
     });
   });
 
+  const Handledeleteclick = (brokerID) => {
+    var brokerindex = brokers
+      .map(function (broker) {
+        return broker.brokerID;
+      })
+      .indexOf(brokerID);
+
+    Setdeletebroker(brokers[brokerindex]);
+
+    SetDeleteModal(true);
+  };
+  const Handleeditclick = (brokerID) => {
+    var brokerindex = brokers
+      .map(function (broker) {
+        return broker.brokerID;
+      })
+      .indexOf(brokerID);
+    Seteditbroker(brokers[brokerindex]);
+
+    SetEditmodal(true);
+  };
+
   let addModalClose = () => {
     SetaddModal(false);
   };
+  let deleteModalClose = () => {
+    SetDeleteModal(false);
+  };
+  let editModalClose = () => {
+    SetEditmodal(false);
+  };
+  // Get current posts
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentbrokers = brokers.slice(indexOfFirstPost, indexOfLastPost);
+
+  // Change page
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
   return (
     <div>
       <Broker />
@@ -44,21 +89,43 @@ function Brokertable() {
                 </tr>
               </thead>
               <tbody>
-                {brokers.map((broker) => (
+                {currentbrokers.map((broker) => (
                   <tr Key={broker.brokerID}>
                     <td>{broker.ID}</td>
                     <td>{broker.brokername}</td>
                     <td>{broker.brokerinfo}</td>
                     <td>{broker.contact}</td>
                     <td>
-                      <Button>Edit</Button>
-                      <Button variant="danger">Delete</Button>
+                      <Button onClick={() => Handleeditclick(broker.brokerID)}>
+                        Edit
+                      </Button>
+                      <Button
+                        variant="danger"
+                        onClick={() => Handledeleteclick(broker.brokerID)}
+                      >
+                        Delete
+                      </Button>
+                      <Editbroker
+                        passitem={editbroker}
+                        show={Editmodal}
+                        onHide={editModalClose}
+                      />
+                      <Deletebroker
+                        passitem={deletebroker}
+                        show={Deletemodal}
+                        onHide={deleteModalClose}
+                      />
                     </td>
                   </tr>
                 ))}
               </tbody>
             </Table>
           </Container>
+          <Pagination
+            postsPerPage={postsPerPage}
+            totalPosts={brokers.length}
+            paginate={paginate}
+          />
         </div>
       </div>
     </div>
