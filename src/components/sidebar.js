@@ -3,35 +3,47 @@ import { Link } from "react-router-dom";
 import "./styles.css";
 
 function Sidebar(props) {
-  const [dropdown, Setdropdown] = useState(false);
+  const [productsdropdown, Setproductsdropdown] = useState(false);
   const [inventorydropdown, Setinventorydropdown] = useState(false);
   const [clientdropdown, Setclientdropdown] = useState(false);
   const [brokerdropdown, Setbrokerdropdown] = useState(false);
-  const dropdownset = () => {
-    if (dropdown) {
-      Setdropdown(false);
+  const productsdrop = () => {
+    if (productsdropdown) {
+      Setproductsdropdown(false);
     } else {
-      Setdropdown(true);
+      Setclientdropdown(false);
+      Setinventorydropdown(false);
+      Setproductsdropdown(true);
+      Setbrokerdropdown(false)
     }
   };
   const inventorydrop = () => {
     if (inventorydropdown) {
       Setinventorydropdown(false);
     } else {
+      Setclientdropdown(false);
+      Setproductsdropdown(false);
       Setinventorydropdown(true);
+      Setbrokerdropdown(false)
     }
   };
   const clientdrop = () => {
     if (clientdropdown) {
       Setclientdropdown(false);
     } else {
+      Setproductsdropdown(false);
+      Setinventorydropdown(false);
       Setclientdropdown(true);
+      Setbrokerdropdown(false)
     }
   };
   const brokerdrop = () => {
     if (brokerdropdown) {
       Setbrokerdropdown(false);
     } else {
+      Setproductsdropdown(false);
+      Setinventorydropdown(false);
+      Setclientdropdown(false);
       Setbrokerdropdown(true);
     }
   };
@@ -74,13 +86,13 @@ function Sidebar(props) {
             <Link to="/clients">Client List</Link>
           </div>
 
-          <button onClick={() => dropdownset()} class="dropdown-btn">
+          <button onClick={() => productsdrop()} class="dropdown-btn">
             Products
             <i class="fa fa-caret-down"></i>
           </button>
           <div
             className={
-              props.productsdropdown || dropdown
+              productsdropdown
                 ? "active"
                 : "dropdown-container"
             }
@@ -89,10 +101,10 @@ function Sidebar(props) {
               className={props.productsadd ? "active" : null}
               to="/itemsadd"
             >
-              Add Items
+              Add Products
             </Link>
             <Link className={props.products ? "active" : null} to="/items">
-              Items List
+              Products List
             </Link>
           </div>
           <button
