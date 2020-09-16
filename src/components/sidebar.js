@@ -7,6 +7,7 @@ function Sidebar(props) {
   const [inventorydropdown, Setinventorydropdown] = useState(false);
   const [clientdropdown, Setclientdropdown] = useState(false);
   const [brokerdropdown, Setbrokerdropdown] = useState(false);
+  const [billdropdown, Setbilldropdown] = useState(false);
   const productsdrop = () => {
     if (productsdropdown) {
       Setproductsdropdown(false);
@@ -14,7 +15,7 @@ function Sidebar(props) {
       Setclientdropdown(false);
       Setinventorydropdown(false);
       Setproductsdropdown(true);
-      Setbrokerdropdown(false)
+      Setbrokerdropdown(false);
     }
   };
   const inventorydrop = () => {
@@ -24,7 +25,7 @@ function Sidebar(props) {
       Setclientdropdown(false);
       Setproductsdropdown(false);
       Setinventorydropdown(true);
-      Setbrokerdropdown(false)
+      Setbrokerdropdown(false);
     }
   };
   const clientdrop = () => {
@@ -34,7 +35,7 @@ function Sidebar(props) {
       Setproductsdropdown(false);
       Setinventorydropdown(false);
       Setclientdropdown(true);
-      Setbrokerdropdown(false)
+      Setbrokerdropdown(false);
     }
   };
   const brokerdrop = () => {
@@ -45,6 +46,17 @@ function Sidebar(props) {
       Setinventorydropdown(false);
       Setclientdropdown(false);
       Setbrokerdropdown(true);
+    }
+  };
+  const billdrop = () => {
+    if (billdropdown) {
+      Setbilldropdown(false);
+    } else {
+      Setproductsdropdown(false);
+      Setinventorydropdown(false);
+      Setclientdropdown(false);
+      Setbrokerdropdown(false);
+      Setbilldropdown(true);
     }
   };
   return (
@@ -59,12 +71,17 @@ function Sidebar(props) {
           >
             Home
           </Link>
-          <Link
-            className={props.bill ? "fa fa-users active" : "fa fa-users"}
-            to="/bill"
+          <button
+            onClick={() => billdrop()}
+            className={" fa fa-users dropdown-btn "}
           >
-            Bill
-          </Link>
+            Bill<i class="fa fa-caret-down"></i>
+          </button>
+          <div className={billdropdown ? "active" : "dropdown-container"}>
+            <Link to="/addbill">Generate Bill</Link>
+            <Link to="/bill">Bill List</Link>
+          </div>
+
           <button
             onClick={() => inventorydrop()}
             className="dropdown-btn fa fa-shopping-cart"
@@ -90,13 +107,7 @@ function Sidebar(props) {
             Products
             <i class="fa fa-caret-down"></i>
           </button>
-          <div
-            className={
-              productsdropdown
-                ? "active"
-                : "dropdown-container"
-            }
-          >
+          <div className={productsdropdown ? "active" : "dropdown-container"}>
             <Link
               className={props.productsadd ? "active" : null}
               to="/itemsadd"

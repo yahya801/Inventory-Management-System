@@ -33,5 +33,8 @@ brokertable: "CREATE TABLE `broker` (`brokerID` int NOT NULL AUTO_INCREMENT, `br
 viewbroker: "SELECT *, CONCAT('BID',LPAD(`brokerID`,4,'0')) AS `ID` FROM `broker`",
 addbroker: "INSERT INTO `broker`(`brokername`,`brokerinfo`,`contact`) VALUES (?,?,?)",
 brokerupdate: "UPDATE `broker` SET `brokername`=?, `brokerinfo` = ? , `contact`=? WHERE `brokerID` = ?",
-brokerdelete: "DELETE FROM `broker` WHERE `brokerID` = ?"
+brokerdelete: "DELETE FROM `broker` WHERE `brokerID` = ?",
+
+//bill
+billtable: "CREATE TABLE `bill`  "
 };

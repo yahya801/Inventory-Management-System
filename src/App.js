@@ -10,6 +10,7 @@ import Itemsearch from "./components/Items/searchview";
 import Clientview from "./components/clients/clientview";
 import Brokermain from "./components/brokers/brokermain";
 import AddClient from './components/clients/newclients/addclientform'
+import Addbill from './components/Bill/addbill'
 
 export default class App extends Component {
   render() {
@@ -28,6 +29,7 @@ export default class App extends Component {
             <Route path="/clients" component={Clientview} />
             <Route path="/brokers" component={Brokermain} />
             <Route path ="/addclients" component={AddClient} />
+            <Route path="/addbill" component={Addbill} />
           </div>
         </Switch>
       </Router>
