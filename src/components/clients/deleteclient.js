@@ -4,6 +4,17 @@ import styles from "./client.module.css";
 const { ipcRenderer } = window.require("electron");
 
 function Deleteclient(props) {
+const [deletesuccess,Setdeletesucces] = useState(false)
+  const handledelete = () => {
+    ipcRenderer.send("DeleteClient",props.passitem.clientID)
+    ipcRenderer.on("ClientDeleted",async(err) => {
+      Setdeletesucces(true)
+      setTimeout(() => {
+        Setdeletesucces(false)
+        props.onHide()
+      }, 2000);
+    })
+  }
     return (
         <Modal
         {...props}
@@ -16,6 +27,7 @@ function Deleteclient(props) {
             Delete Client
           </Modal.Title>
         </Modal.Header>
+        {deletesuccess ? <div>Client Deleted</div> : null}
         <Modal.Body>
           
           <p>
@@ -23,6 +35,7 @@ function Deleteclient(props) {
           </p>
         </Modal.Body>
         <Modal.Footer>
+        <Button variant="danger" onClick={() => handledelete()}>Delete</Button>
           <Button onClick={props.onHide}>Close</Button>
         </Modal.Footer>
       </Modal>

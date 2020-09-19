@@ -4,21 +4,29 @@ import Client from "./client";
 import { Container, Button, ButtonToolbar } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
 import Addclient from "./addclient";
-import Deleteclient from './deleteclient'
+import EditClient from './editclient'
+import Deleteclient from "./deleteclient";
+import Pagination from "./pagination";
 const { ipcRenderer } = window.require("electron");
 
 function Clienttable() {
-  let addModalClose = () => {
-    SetaddModal(false);
-  };
   let deleteModalClose = () => {
-    SetdeleteModal(false)
-  }
+    SetdeleteModal(false);
+  };
+  let editModalClose = () => {
+    Seteditmodal(false);
+  };
+
   const [addModal, SetaddModal] = useState("");
   const [clients, Setclients] = useState([]);
   const [listener, Setlistener] = useState(false);
-  const [deleteModal,SetdeleteModal] = useState(false)
-  const [deleteclient,Setdeleteclient] = useState("")
+  const [deleteModal, SetdeleteModal] = useState(false);
+  const [deleteclient, Setdeleteclient] = useState("");
+  const [editmodal, Seteditmodal] = useState(false);
+  const [editclient,Seteditclient] = useState("")
+  const [nodata, Setnodate] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postsPerPage] = useState(7);
 
   useEffect(() => {
     ipcRenderer.send("ClientView");
@@ -26,114 +34,124 @@ function Clienttable() {
       console.log(listener);
       Setlistener(true);
       ipcRenderer.on("ClientViewResult", async (err, result) => {
-        Setclients(result);
+        if (result.length > 0) {
+          Setclients(result);
+        } else {
+          Setnodate(true);
+        }
       });
     }
   });
-  const handledeleteClick =(clientID)=> {
+  const handleeditClick = (clientID) => {
     var clientindex = clients
     .map(function (client) {
       return client.clientID;
     })
     .indexOf(clientID);
-    Setdeleteclient(clients[clientindex])
-    SetdeleteModal(true)
+    Seteditclient(clients[clientindex])
+    Seteditmodal(true)
   }
+  const handledeleteClick = (clientID) => {
+    var clientindex = clients
+      .map(function (client) {
+        return client.clientID;
+      })
+      .indexOf(clientID);
+    Setdeleteclient(clients[clientindex]);
+    SetdeleteModal(true);
+  };
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentclients = clients.slice(indexOfFirstPost, indexOfLastPost);
 
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
   return (
     <div>
-      <Client />
-      <div style={{ paddingLeft: "10px" }}>
-        <div className={styles.itembox}>
+      {/* <Client /> */}
+      <div style={{ paddingLeft: "5px", paddingRight: "5px" }}>
+        <div className={styles.itembox2}>
           <div className="row">
             <h5>Manage Client</h5>
-            <input
-              // className={styles.inputtext}
-              type="text"
-              //   value={search}
-              required
-              //   onChange={(e) => Setsearch(e.target.value)}
-              placeholder="Search"
-            />
-            {/* <button onClick={() => searchclick()}>Search</button> */}
-            {/* {searchredirect ? (
-            <Redirect to={`/itemsearch?itemname=${search}`} />
-          ) : null} */}
-            <ButtonToolbar>
-              <Button variant="primary" onClick={() => SetaddModal(true)}>
-                Add Client
-              </Button>
-              <Addclient show={addModal} onHide={addModalClose} />
-            </ButtonToolbar>
+
             <Container>
-              <Table striped bordered hover>
-                <thead>
+              <Table className={styles.table} bordered>
+                <thead className={styles.heading}>
                   <tr>
-                    <th>S.No</th>
-                    <th>Clientname</th>
-                    <th>Shop Address</th>
-                    <th>Contact Info</th>
+                    <th style={{ width: "50px" }}>S.No</th>
+                    <th style={{ width: "300px" }}>Details</th>
+                    <th></th>
+
                     <th>Edit / Delete</th>
                   </tr>
                 </thead>
                 <tbody>
-                    
-                {clients.map((client,index) => (
-                  <tr Key={client.clientID}>
-                    <td>{client.ID}</td>
-                    <td
-                    //   onClick={() => inventorynameclick(invent.inventID)}
-                      className={styles.itemname}
-                    >
-                      {client.clientname}
-                    </td>
-                
+                  {nodata ? `No Data Found` : null}
 
-                    <td>{client.shopaddress}</td>
-                    <td>{client.contact}</td>
-                     
-                    <td>
-                      <Button
-                        // style={{ height: "40px"  }}
-                        // variant="primary"
-                        // onClick={() => handleeditClick(invent.inventID)}
+                  {currentclients.map((client, index) => (
+                    <tr className={styles.tablebody} Key={client.clientID}>
+                      <td>{client.ID}</td>
+                      <td
+                        //   onClick={() => inventorynameclick(invent.inventID)}
+                        className={styles.itemname}
                       >
-                        Edit
-                      </Button>
-                      <Button
-                        // style={{ height: "40px"  }}
-                        variant="danger"
-                        onClick={() => handledeleteClick(client.clientID)}
-                      >
-                        Delete
-                      </Button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
+                        <b>Clientname: </b>
+                        {client.clientname}
+                        <br />
+                        <b>Companyname: </b>
+                        {client.companyname}
+                        <br />
+                        <b>Shop Address: </b>
+                        {client.shopaddress}
+                        <br />
+                        <b>Contact: </b>
+                        {client.contact}
+                      </td>
+
+                      <td></td>
+
+                      <td>
+                        <Button
+                          // style={{ height: "30px",textAlign:"center" }}
+                          variant="primary"
+                          onClick={() => handleeditClick(client.clientID)}
+                        >
+                          <i class="fa fa-pencil" aria-hidden="true"></i>
+                        </Button>
+                        <Button
+                          // style={{ height: "40px"  }}
+                          variant="danger"
+                          onClick={() => handledeleteClick(client.clientID)}
+                        >
+                          <i class="fa fa-trash" aria-hidden="true"></i>
+                        </Button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
               </Table>
             </Container>
           </div>
-          {/* <Pagination
-          postsPerPage={postsPerPage}
-          totalPosts={inventory.length}
-          paginate={paginate}
-        /> */}
-        {/* <Viewmodal
+          <Pagination
+            postsPerPage={postsPerPage}
+            totalPosts={clients.length}
+            paginate={paginate}
+          />
+
+          {/* <Viewmodal
           passitem={inventoryview}
           show={inventoryModal}
           onHide={viewModalClose}
         /> */}
-        <Deleteclient
-          passitem={deleteclient}
-          show={deleteModal}
-          onHide={deleteModalClose}
-        />
-         {/* <Editmodal
-          passitem={editinvent}
-          show={editModal}
+          <Deleteclient
+            passitem={deleteclient}
+            show={deleteModal}
+            onHide={deleteModalClose}
+          />
+          <EditClient
+          passitem={editclient}
+          show={editmodal}
           onHide={editModalClose}
-        /> */}
+        />
         </div>
       </div>
     </div>

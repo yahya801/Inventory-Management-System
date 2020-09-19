@@ -1,14 +1,11 @@
-import React from "react";
-import styles from './navbar.module.css'
-
+import React from 'react'
+import  './styles.css'
 function navbar() {
-  return (
-    <div>
-      <div className={styles.topnav}>
-       kjhkvbh
-      </div>
-    </div>
-  );
+    return (
+        <div className="div1">
+            wedfgvb
+        </div>
+    )
 }
 
-export default navbar;
+export default navbar

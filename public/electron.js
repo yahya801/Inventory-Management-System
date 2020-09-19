@@ -1,5 +1,5 @@
 const electron = require("electron");
-const { ipcMain,dialog } = require("electron");
+const { ipcMain, dialog } = require("electron");
 const bcrypt = require("bcrypt");
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
@@ -32,6 +32,7 @@ function createWindow() {
       ? "http://localhost:3000"
       : `file://${path.join(__dirname, "../build/index.html")}`
   );
+  mainWindow.setBackgroundColor("#56cc5b10");
 
   mainWindow.once("ready-to-show", () => {
     // createconnection();
@@ -127,16 +128,16 @@ ipcMain.on("ItemsQuery", async (event) => {
 });
 ipcMain.on("DeleteItem", (event, arg) => {
   // console.log(arg)
-  let options  = {
-    buttons: ["Yes","No","Cancel"],
-    message: "Do you really want to quit?"
-   }
+  let options = {
+    buttons: ["Yes", "No", "Cancel"],
+    message: "Do you really want to quit?",
+  };
   itemid = [arg];
   connection.query(DB.deleteitems, itemid, (err) => {
     if (err) {
       console.log(err);
-      let response = dialog.showMessageBox(options)
-console.log(response),dialog
+      let response = dialog.showMessageBox(options);
+      console.log(response), dialog;
     } else {
       event.sender.send("DeletedSuccessfully");
       // console.log("Deleted Successfully")
@@ -157,7 +158,13 @@ ipcMain.on("EditItemQuery", (event, arg) => {
   }
 });
 ipcMain.on("EditItem", (event, arg) => {
-  query = [arg.productname, arg.description, arg.category, arg.origin, arg.itemID];
+  query = [
+    arg.productname,
+    arg.description,
+    arg.category,
+    arg.origin,
+    arg.itemID,
+  ];
   connection.query(DB.updateitem, query, (err) => {
     if (err) {
       console.log(err);
@@ -247,10 +254,47 @@ ipcMain.on("EditInventory", (event, arg) => {
   });
 });
 ipcMain.on("AddClient", (event, arg) => {
-  query = [arg.clientname, arg.shopaddress, arg.contact];
-  connection.query(DB.addclient, query, (err) => {
+  query = [arg.clientname, arg.companyname, arg.shopaddress, arg.contact];
+  let options = {
+    // buttons: ["Yes", "No", "Cancel"],
+    message: "Client Already Exists",
+  };
+  connection.query(DB.addclientcheck, [arg.clientname], (err, result) => {
     if (err) {
       console.log(err);
+    } else {
+      // console.log(result)
+      // console.log(result.length)
+      if (result.length === 0) {
+        connection.query(DB.addclient, query, (err) => {
+          if (err) {
+            console.log(err);
+          } else {
+            event.sender.send("ClientAdded");
+          }
+        });
+      } else {
+        let response = dialog.showMessageBox(options);
+        console.log(response), dialog;
+      }
+    }
+  });
+});
+
+ipcMain.on("EditClient", (event, arg) => {
+  query = [
+    arg.clientname,
+    arg.companyname,
+    arg.shopaddress,
+    arg.contact,
+    arg.clientID,
+  ];
+  connection.query(DB.clientupdate, query, (err) => {
+    if(err){
+      console.log(err)
+    }
+    else{
+      event.sender.send("ClientUpdated")
     }
   });
 });
@@ -268,6 +312,22 @@ ipcMain.on("ClientView", (event) => {
     []
   );
 });
+
+ipcMain.on("DeleteClient",(event,arg) => {
+  let options = {
+    // buttons: ["Yes", "No", "Cancel"],
+    message: "Client Cannot be Deleted as it is used somewhere else",
+  };
+  connection.query(DB.clientdelete,[arg],(err)=>{
+    if(err){
+      let response = dialog.showMessageBox(options);
+      console.log(response), dialog;
+    }
+    else{
+      event.sender.send("ClientDeleted")
+    }
+  })
+})
 
 ipcMain.on("ViewBroker", (event) => {
   connection.query(DB.viewbroker, (err, result) => {
@@ -300,6 +360,16 @@ ipcMain.on("EditBroker", (event, arg) => {
   connection.query(DB.brokerupdate, query, (err) => {
     if (err) {
       console.log(err);
+    }
+  });
+});
+
+ipcMain.on("BillInventory", (event, arg) => {
+  connection.query(DB.billinventform, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      event.sender.send("InventoryOptions", result);
     }
   });
 });

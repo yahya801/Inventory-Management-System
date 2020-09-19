@@ -28,6 +28,7 @@ export function Signin() {
   useEffect(() => {
    
     ipcRenderer.on("Userloggedin", (event, messages) => {
+      localStorage.setItem('username', username);
       Setredirect("/dashboard")
     });
 

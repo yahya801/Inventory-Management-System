@@ -60,22 +60,19 @@ function Sidebar(props) {
     }
   };
   return (
-    <div>
+    
       <div className="sidebar">
         <div>
           <Link to="/dashboard"> Popular Traders</Link>
 
-          <Link
-            className={props.home ? " fa fa-user active " : "fa fa-user"}
-            to="/dashboard"
-          >
+          <Link className=" fa fa-user dropdown-btn" to="/dashboard">
             Home
           </Link>
           <button
             onClick={() => billdrop()}
-            className={" fa fa-users dropdown-btn "}
+            className={"fa fa-users dropdown-btn "}
           >
-            Bill<i class="fa fa-caret-down"></i>
+            Bill<i class="fa fa-caret-down "></i>
           </button>
           <div className={billdropdown ? "active" : "dropdown-container"}>
             <Link to="/addbill">Generate Bill</Link>
@@ -134,7 +131,7 @@ function Sidebar(props) {
           </Link>
         </div>
       </div>
-    </div>
+   
   );
 }
 

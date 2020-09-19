@@ -22,10 +22,11 @@ module.exports = {
  inventorydelete: "DELETE FROM `inventory` WHERE `inventID` = ?",
  inventoryupdate: "UPDATE `inventory` SET `lotno` = ?,`date`=?,`noofbags`=?,`leftbags`=?,`priceperkg`=?,`totalweight`=?,`labourexpense`=?,`transportexpense`=?,`cartonexpense`=?,`otherexpense`=?,`totalexpense`=? WHERE `inventID`= ?",
 //client
-clienttable: "CREATE TABLE `client` (`clientID` int NOT NULL AUTO_INCREMENT, `clientname` varchar(255) NOT NULL, `shopaddress` varchar(255),`contact` varchar(255),PRIMARY KEY (`clientID`)) ",
-addclient: "INSERT INTO `client` (`clientname`,`shopaddress`,`contact`) VALUES (?,?,?)",
+clienttable: "CREATE TABLE `client` (`clientID` int NOT NULL AUTO_INCREMENT, `clientname` varchar(255) NOT NULL, `companyname` varchar(255) NOT NULL, `shopaddress` varchar(255),`contact` varchar(255),PRIMARY KEY (`clientID`)) ",
+addclient: "INSERT INTO `client` (`clientname`,`companyname`,`shopaddress`,`contact`) VALUES (?,?,?,?)",
+addclientcheck: "SELECT * FROM `client` WHERE `clientname` = ?",
 viewclient: "SELECT *, CONCAT('CID',LPAD(`clientID`, 4, '0')) AS `ID` FROM `client`",
-clientupdate: "UPDATE `client` Set `clientname`=?,`shopeaddress`=?,`contact`=? WHERE `clientID`=?",
+clientupdate: "UPDATE `client` Set `clientname`=?,`companyname`= ?,`shopaddress`=?,`contact`=? WHERE `clientID`=?",
 clientdelete: "DELETE FROM `client` WHERE `clientID` = ?",
 
 //broker
@@ -36,5 +37,7 @@ brokerupdate: "UPDATE `broker` SET `brokername`=?, `brokerinfo` = ? , `contact`=
 brokerdelete: "DELETE FROM `broker` WHERE `brokerID` = ?",
 
 //bill
-billtable: "CREATE TABLE `bill`  "
+
+billtable: "CREATE TABLE `bill`  ",
+billinventform: "SELECT `inventory`.*,`items`.`itemname`,`items`.`description`,`items`.`origin`,`items`.`category` FROM `inventory` INNER JOIN `items` ON `inventory`.`ItemID` = `items`.`ItemID` AND `inventory`.`leftbags` > 0"
 };

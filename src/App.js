@@ -11,13 +11,14 @@ import Clientview from "./components/clients/clientview";
 import Brokermain from "./components/brokers/brokermain";
 import AddClient from './components/clients/newclients/addclientform'
 import Addbill from './components/Bill/addbill'
+import Experiment from './components/Bill/experiment'
 
 export default class App extends Component {
   render() {
     return (
       <Router>
         <Switch>
-          <div className="App">
+          <div >
             <Route exact path="/" component={Signin} />
             <Route path="/signup" component={Signup} />
             <Route path="/signin" component={Signin} />
@@ -30,6 +31,7 @@ export default class App extends Component {
             <Route path="/brokers" component={Brokermain} />
             <Route path ="/addclients" component={AddClient} />
             <Route path="/addbill" component={Addbill} />
+            <Route path="/bill" component={Experiment} />
           </div>
         </Switch>
       </Router>

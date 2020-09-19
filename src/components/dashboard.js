@@ -4,8 +4,8 @@ import Navbar from './navbar'
 
 function dashboard() {
     return (
-        <div>
-            <Sidebar home={true} />
+        <div style={{backgroundColor: "red"}}>
+            <Sidebar  />
             <Navbar />
         </div>
     )

@@ -50,7 +50,7 @@ td {
 }
 
 tr:nth-child(even) {
-    background-color: #c45f5f;
+    /* background-color: #c45f5f; */
 }
 
 .modal {
