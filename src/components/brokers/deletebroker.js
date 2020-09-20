@@ -4,9 +4,19 @@ import styles from "./broker.module.css";
 const { ipcRenderer } = window.require("electron");
 
 function Deletebroker(props) {
-  const Handledeleteclick = () => {
+  const [deletesuccess, Setdeletesucces] = useState(false);
+  const handledeleteclick = () => {
     ipcRenderer.send("DeleteBroker", props.passitem.brokerID);
-    props.onHide();
+
+    ipcRenderer.on("BrokerDeleted", async (err) => {
+      console.log("deleted")
+      Setdeletesucces(true);
+      console.log(deletesuccess)
+      setTimeout(() => {
+        // Setdeletesucces(false);
+        props.onHide();
+      }, 3000);
+    });
   };
   return (
     <Modal
@@ -17,18 +27,19 @@ function Deletebroker(props) {
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          Modal heading
+         Delete Broker
         </Modal.Title>
       </Modal.Header>
+      {/* {deletesuccess ?  : null} */}
       <Modal.Body>
-        <h4>Centered Modal</h4>
+      <div className={deletesuccess ?  null : styles.display}>Broker Deleted</div>
         <p>
           Do you want to delete the broker with the name{" "}
           <b>{props.passitem.brokername}</b>
         </p>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={() => Handledeleteclick()}>Yes</Button>
+        <Button onClick={() => handledeleteclick()}>Yes</Button>
         <Button onClick={props.onHide}>Close</Button>
       </Modal.Footer>
     </Modal>

@@ -122,7 +122,7 @@ function Sidebar(props) {
             Broker<i class="fa fa-caret-down"></i>
           </button>
           <div className={brokerdropdown ? "active" : "dropdown-container"}>
-            <Link to="/brokers">Add Broker</Link>
+            <Link to="/addbrokers">Add Broker</Link>
             <Link to="/brokers">Broker List</Link>
           </div>
 

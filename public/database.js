@@ -32,6 +32,7 @@ clientdelete: "DELETE FROM `client` WHERE `clientID` = ?",
 //broker
 brokertable: "CREATE TABLE `broker` (`brokerID` int NOT NULL AUTO_INCREMENT, `brokername` varchar(255) NOT NULL,`brokerinfo` varchar(255),`contact` varchar(255),PRIMARY KEY(`brokerID`))",
 viewbroker: "SELECT *, CONCAT('BID',LPAD(`brokerID`,4,'0')) AS `ID` FROM `broker`",
+addbrokercheck: "SELECT * FROM `broker` WHERE `brokername` = ?",
 addbroker: "INSERT INTO `broker`(`brokername`,`brokerinfo`,`contact`) VALUES (?,?,?)",
 brokerupdate: "UPDATE `broker` SET `brokername`=?, `brokerinfo` = ? , `contact`=? WHERE `brokerID` = ?",
 brokerdelete: "DELETE FROM `broker` WHERE `brokerID` = ?",

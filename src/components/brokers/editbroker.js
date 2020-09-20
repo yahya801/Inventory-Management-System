@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Button, Row, Col, Form } from "react-bootstrap";
+import { Container, Modal, Button, Row, Col, Form } from "react-bootstrap";
 import styles from "./broker.module.css";
 const { ipcRenderer } = window.require("electron");
 
@@ -8,6 +8,7 @@ function Editbroker(props) {
   const [brokerinfo, Setbrokerinfo] = useState("");
   const [contact, Setcontact] = useState("");
   const [error, Seterror] = useState("");
+  const [update, Setupdate] = useState("");
   const brokerID = props.passitem.brokerID;
 
   useEffect(() => {
@@ -20,15 +21,31 @@ function Editbroker(props) {
     if (!brokername || !brokerinfo || !contact) {
       Seterror("Fields not filled");
     } else {
-      const array = {
-        brokername,
-        brokerinfo,
-        contact,
-        brokerID
-      };
+      if (
+        brokername !== props.passitem.brokername ||
+        brokerinfo !== props.passitem.brokerinfo ||
+        contact !== props.passitem.contact
+      ) {
+        const array = {
+          brokername,
+          brokerinfo,
+          contact,
+          brokerID,
+        };
 
-      ipcRenderer.send("EditBroker",array)
-      props.onHide()
+        ipcRenderer.send("EditBroker", array);
+
+        ipcRenderer.on("BrokerEdited", async (err) => {
+          Setupdate(true)
+          Setbrokername("")
+          Setbrokerinfo("")
+          Setcontact("")
+          setTimeout(() => {
+            Setupdate(false)
+            props.onHide()
+          }, 2000);
+        });
+      }
     }
   };
   return (
@@ -40,37 +57,59 @@ function Editbroker(props) {
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          Modal heading
+          Broker Edit
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <h4>Centered Modal</h4>
-        <form>
-          <label>Broker Name</label>
-          <input
-            value={brokername}
-            className={styles.inputtext}
-            type="text"
-            placeholder="Client Name"
-            onChange={(e) => Setbrokername(e.target.value)}
-          />
-          <label>Broker Info</label>
-          <input
-            value={brokerinfo}
-            className={styles.inputtext}
-            type="text"
-            placeholder="Broker Info"
-            onChange={(e) => Setbrokerinfo(e.target.value)}
-          />
-          <label>Contact Info</label>
-          <input
-            value={contact}
-            className={styles.inputtext}
-            type="text"
-            placeholder="Contact No"
-            onChange={(e) => Setcontact(e.target.value)}
-          />
-        </form>
+        {update ? <div>Broker Updated</div> : null}
+        <Form>
+          <Form.Group>
+            <div class="row justify-content-md-center">
+              <Form.Label column sm={2}>
+                Broker Name
+              </Form.Label>
+              <Col sm={5}>
+                <Form.Control
+                  type="name"
+                  value={brokername}
+                  placeholder="Name"
+                  onChange={(e) => Setbrokername(e.target.value)}
+                />
+              </Col>
+            </div>
+            <br />
+
+            <div class="row justify-content-md-center">
+              <Form.Label column sm={2}>
+                Broker Info
+              </Form.Label>
+              <Col sm={5}>
+                <Form.Control
+                  type="name"
+                  value={brokerinfo}
+                  placeholder="Info"
+                  onChange={(e) => Setbrokerinfo(e.target.value)}
+                />
+              </Col>
+            </div>
+            <br />
+            <div class="row justify-content-md-center">
+              <Form.Label column sm={2}>
+                Phone No
+              </Form.Label>
+              <Col sm={5}>
+                <Form.Control
+                  type="number"
+                  placeholder="Phone No"
+                  value={contact}
+                  onChange={(e) => Setcontact(e.target.value)}
+                />
+                {error}
+              </Col>
+            </div>
+            {/* {error} */}
+          </Form.Group>
+        </Form>
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={() => HandleClick()}>Submit</Button>

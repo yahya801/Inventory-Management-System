@@ -12,31 +12,66 @@
 .addbutton {
     margin: 10px
 }
-.itemname:hover{
+
+.itemname:hover {
     cursor: pointer;
     /* background: #79a177; */
 }
+
 .itembox {
-    margin-top: 10px;
+    margin-top: 20px;
     margin-left: 200px;
-    height: auto;
+    height: 80%;
     padding-left: 20px;
-    max-height: 575px;
-    width: 82.5%;
-    background-color: white;
-    /* overflow: auto; */
+    max-height: 800px;
+    width: 83%;
+    background-color: rgb(255, 255, 255);
+    overflow: auto;
     position: fixed;
-   
-}
-h2{
-    position:  sticky;
+
 }
 
+.box {
+    border: 1px solid black;
+    height: 450px;
+
+}
+
+.addbox {
+    margin-left: 10px;
+    height: 400px;
+
+}
+.display{
+    display: none;
+}
+.submitbutton {
+    padding-top: 20px;
+    padding-left: 366px;
+    text-align: left;
+}
+
+.box2 {
+    /* border: 1px solid black; */
+    height: 70%;
+    margin: 10px 10px;
+    padding: 50px;
+
+
+}
+
+h2 {
+    position: sticky;
+}
+.addbrokerbox {
+    display: none;
+
+}
 table {
     padding-top: 50px;
     width: 95%;
     /* height: 80%; */
-    
+
     border-style: solid;
     border-width: 2px;
     border-color: #c45f5f;
@@ -45,7 +80,7 @@ table {
 th,
 td {
     text-align: left;
-   padding: 10px;
+    padding: 10px;
     /* border-style: solid; */
 }
 

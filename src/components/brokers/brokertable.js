@@ -72,9 +72,7 @@ function Brokertable() {
           <div className="row"></div>
           <h5>Manage Brokers</h5>
           <ButtonToolbar>
-            <Button variant="primary" onClick={() => SetaddModal(true)}>
-              Add Broker
-            </Button>
+            
             <Addbroker show={addModal} onHide={addModalClose} />
           </ButtonToolbar>
           <Container>

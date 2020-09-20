@@ -37,6 +37,7 @@ function Clienttable() {
         if (result.length > 0) {
           Setclients(result);
         } else {
+          Setclients([])
           Setnodate(true);
         }
       });

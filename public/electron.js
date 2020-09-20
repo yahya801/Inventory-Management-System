@@ -257,7 +257,7 @@ ipcMain.on("AddClient", (event, arg) => {
   query = [arg.clientname, arg.companyname, arg.shopaddress, arg.contact];
   let options = {
     // buttons: ["Yes", "No", "Cancel"],
-    message: "Client Already Exists",
+    message: "Client Already Exists Try changing the details",
   };
   connection.query(DB.addclientcheck, [arg.clientname], (err, result) => {
     if (err) {
@@ -290,11 +290,10 @@ ipcMain.on("EditClient", (event, arg) => {
     arg.clientID,
   ];
   connection.query(DB.clientupdate, query, (err) => {
-    if(err){
-      console.log(err)
-    }
-    else{
-      event.sender.send("ClientUpdated")
+    if (err) {
+      console.log(err);
+    } else {
+      event.sender.send("ClientUpdated");
     }
   });
 });
@@ -313,21 +312,20 @@ ipcMain.on("ClientView", (event) => {
   );
 });
 
-ipcMain.on("DeleteClient",(event,arg) => {
+ipcMain.on("DeleteClient", (event, arg) => {
   let options = {
     // buttons: ["Yes", "No", "Cancel"],
     message: "Client Cannot be Deleted as it is used somewhere else",
   };
-  connection.query(DB.clientdelete,[arg],(err)=>{
-    if(err){
+  connection.query(DB.clientdelete, [arg], (err) => {
+    if (err) {
       let response = dialog.showMessageBox(options);
       console.log(response), dialog;
+    } else {
+      event.sender.send("ClientDeleted");
     }
-    else{
-      event.sender.send("ClientDeleted")
-    }
-  })
-})
+  });
+});
 
 ipcMain.on("ViewBroker", (event) => {
   connection.query(DB.viewbroker, (err, result) => {
@@ -341,27 +339,65 @@ ipcMain.on("ViewBroker", (event) => {
 
 ipcMain.on("AddBroker", (event, arg) => {
   query = [arg.brokername, arg.brokerinfo, arg.contact];
-  connection.query(DB.addbroker, query, (err) => {
+  let options = {
+    // buttons: ["Yes", "No", "Cancel"],
+    message: "Broker Already Exists Try changing the details",
+  };
+  connection.query(DB.addbrokercheck, [arg.brokername], (err, result) => {
     if (err) {
       console.log(err);
+    } else {
+      if (result.length === 0) {
+        connection.query(DB.addbroker, query, (err) => {
+          if (err) {
+            console.log(err);
+          } else {
+            event.sender.send("BrokerAdded");
+          }
+        });
+      } else {
+        let response = dialog.showMessageBox(options);
+        console.log(response), dialog;
+      }
     }
   });
 });
 ipcMain.on("DeleteBroker", (event, arg) => {
   // query = [arg.brokerID]
+  let options = {
+    // buttons: ["Yes", "No", "Cancel"],
+    message: "Broker Cannot be Deleted as it is used somewhere else",
+  };
   connection.query(DB.brokerdelete, [arg], (err) => {
     if (err) {
       console.log(err);
+      let response = dialog.showMessageBox(options);
+      console.log(response), dialog;
+    } else {
+      console.log("deleted");
+      event.sender.send("BrokerDeleted");
     }
   });
 });
 ipcMain.on("EditBroker", (event, arg) => {
+  let update = false;
   query = [arg.brokername, arg.brokerinfo, arg.contact, arg.brokerID];
   connection.query(DB.brokerupdate, query, (err) => {
     if (err) {
       console.log(err);
+    } else {
+      update = true;
     }
   });
+  if (update) {
+    connection.query(DB.viewbroker, (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        event.sender.send("BrokerEdited", result);
+      }
+    });
+  }
 });
 
 ipcMain.on("BillInventory", (event, arg) => {
