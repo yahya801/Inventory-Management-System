@@ -25,7 +25,9 @@ function Itemtableview() {
   const [Deleteitem, SetDeleteitem] = useState("");
   const [search, Setsearch] = useState("");
   const [searchredirect, Setsearchredirect] = useState(false);
-  const [itemnameclic,Setitemclick] = useState(false)
+  const [itemnameclic, Setitemclick] = useState(false);
+  const [editredirect, Seteditredirect] = useState(false);
+  const [editItemID, SeteditItemID] = useState("");
   let itemModalClose = () => {
     SetitemshowModal(false);
   };
@@ -60,7 +62,11 @@ function Itemtableview() {
       })
       .indexOf(itemid);
     SeteditItems(items[removeindex]);
-    SeteditModalShow(true);
+    console.log(items[removeindex].ItemID);
+    Seteditredirect(true);
+
+    SeteditItemID(items[removeindex].ItemID);
+    // SeteditModalShow(true);
   };
 
   useEffect(() => {
@@ -73,7 +79,7 @@ function Itemtableview() {
         SetItems(result);
       });
     }
-  });
+  }, [deleteModalshow]);
   const deleteitem = (itemid, itemname) => {
     var removeindex = items
       .map(function (Item) {
@@ -118,33 +124,12 @@ function Itemtableview() {
 
   return (
     <div>
-      <Items />
       <div style={{ paddingLeft: "10px" }}>
         <div className={styles.itembox}>
           <div className="row">
             <h5>Manage Items</h5>
-            <form>
-            <input
-              // className={styles.inputtext}
-              type="text"
-              value={search}
-              required
-              onChange={(e) => Setsearch(e.target.value)}
-              placeholder="Search"
-            />
-            <button onClick={() => searchclick()}>Search</button>
-            </form>
-            {searchredirect ? (
-              <Redirect to={`/itemsearch?itemname=${search}`} />
-            ) : null}
           </div>
           <div>
-            <ButtonToolbar>
-              <Button variant="primary" onClick={() => SetaddModalShow(true)}>
-                Add Item
-              </Button>
-              <ItemModal show={addModalshow} onHide={addModalClose} />
-            </ButtonToolbar>
             <Container>
               <Table striped bordered hover>
                 <thead>
@@ -165,14 +150,12 @@ function Itemtableview() {
                   {currentitems.map((Item, index) => (
                     <tr Key={Item.ItemID}>
                       <td>{index + 1}</td>
-                      
+
                       <td
                         onClick={() => itemnameclick(Item.ItemID)}
                         className={styles.itemname}
                       >
-                        
-                         {Item.itemname}
-                       
+                        {Item.itemname}
                       </td>
                       <td>{Item.description}</td>
                       <td>{Item.category}</td>
@@ -188,6 +171,7 @@ function Itemtableview() {
                             >
                               Edit
                             </Button>
+                            <Link to="/edititem"></Link>
                             <Editmodal
                               passitem={editItems}
                               show={editModalshow}
@@ -204,6 +188,12 @@ function Itemtableview() {
                             >
                               Delete
                             </Button>
+                            {editredirect ? (
+                              <Redirect
+                                to={`/edititems/ItemID=${editItemID}`}
+                              />
+                            ) : null}
+                            {/* <Redirect to={`edititems/ItemID=${edititemID}`} /> */}
                             <Deletemodal
                               passitem={Deleteitem}
                               show={deleteModalshow}
@@ -224,11 +214,10 @@ function Itemtableview() {
             paginate={paginate}
           />
           <Itemview
-                        
-                        passitem={itemview}
-                          show={itemshowModal}
-                          onHide={itemModalClose}
-                        />
+            passitem={itemview}
+            show={itemshowModal}
+            onHide={itemModalClose}
+          />
         </div>
       </div>
     </div>

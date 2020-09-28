@@ -29,6 +29,7 @@ function Experiment() {
           value: `${element.ItemID}`,
           label: `${element.itemname}/PT${element.ItemID}`,
         });
+        console.log(options)
       });
     });
   }, []);

@@ -86,7 +86,7 @@ function Sidebar(props) {
             Inventory<i class="fa fa-caret-down"></i>
           </button>
           <div className={inventorydropdown ? "active" : "dropdown-container"}>
-            <Link to="/inventory">Add Inventory</Link>
+            <Link to="/addinventory">Add Inventory</Link>
             <Link to="/inventory">Inventory List</Link>
           </div>
           <button

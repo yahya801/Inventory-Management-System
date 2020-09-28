@@ -7,14 +7,17 @@ import Addbroker from "./addbroker";
 import Deletebroker from "./deletebroker";
 import Pagination from "./pagination";
 import Editbroker from "./editbroker";
+import { Redirect } from "react-router-dom";
 
 const { ipcRenderer } = window.require("electron");
 function Brokertable() {
+  const [brokerID,SetbrokerID] = useState("")
   const [addModal, SetaddModal] = useState(false);
   const [Deletemodal, SetDeleteModal] = useState(false);
   const [Editmodal, SetEditmodal] = useState(false);
   const [brokers, Setbroker] = useState([]);
   const [deletebroker, Setdeletebroker] = useState("");
+  const [editredirect,Seteditredirect] = useState(false)
   const [editbroker, Seteditbroker] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(7);
@@ -24,7 +27,7 @@ function Brokertable() {
     ipcRenderer.on("BrokerViewResult", async (err, result) => {
       Setbroker(result);
     });
-  });
+  },[Deletemodal]);
 
   const Handledeleteclick = (brokerID) => {
     var brokerindex = brokers
@@ -44,8 +47,9 @@ function Brokertable() {
       })
       .indexOf(brokerID);
     Seteditbroker(brokers[brokerindex]);
-
-    SetEditmodal(true);
+    SetbrokerID(brokers[brokerindex].brokerID)
+Seteditredirect(true)
+    // SetEditmodal(true);
   };
 
   let addModalClose = () => {
@@ -124,6 +128,7 @@ function Brokertable() {
             totalPosts={brokers.length}
             paginate={paginate}
           />
+          {editredirect? <Redirect to={`/editbrokers/brokerID=${brokerID}`} />: null}
         </div>
       </div>
     </div>

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import styles from "./client.module.css";
 import Client from "./client";
+import {Redirect} from 'react-router-dom'
 import { Container, Button, ButtonToolbar } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
 import Addclient from "./addclient";
-import EditClient from './editclient'
+import EditClient from "./editclient";
 import Deleteclient from "./deleteclient";
 import Pagination from "./pagination";
 const { ipcRenderer } = window.require("electron");
@@ -23,7 +24,9 @@ function Clienttable() {
   const [deleteModal, SetdeleteModal] = useState(false);
   const [deleteclient, Setdeleteclient] = useState("");
   const [editmodal, Seteditmodal] = useState(false);
-  const [editclient,Seteditclient] = useState("")
+  const [editclient, Seteditclient] = useState("");
+  const [editredirect, Seteditredirect] = useState(false);
+  const [editID,SeteditId] = useState("")
   const [nodata, Setnodate] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(7);
@@ -42,16 +45,18 @@ function Clienttable() {
         }
       });
     }
-  });
+  },[deleteModal]);
   const handleeditClick = (clientID) => {
     var clientindex = clients
-    .map(function (client) {
-      return client.clientID;
-    })
-    .indexOf(clientID);
-    Seteditclient(clients[clientindex])
-    Seteditmodal(true)
-  }
+      .map(function (client) {
+        return client.clientID;
+      })
+      .indexOf(clientID);
+    Seteditredirect(true);
+    SeteditId(clients[clientindex].clientID)
+    Seteditclient(clients[clientindex]);
+    // Seteditmodal(true);
+  };
   const handledeleteClick = (clientID) => {
     var clientindex = clients
       .map(function (client) {
@@ -137,6 +142,7 @@ function Clienttable() {
             totalPosts={clients.length}
             paginate={paginate}
           />
+          {editredirect ? <Redirect to={`/editclients/clientID=${editID}`} /> : null}
 
           {/* <Viewmodal
           passitem={inventoryview}
@@ -149,10 +155,10 @@ function Clienttable() {
             onHide={deleteModalClose}
           />
           <EditClient
-          passitem={editclient}
-          show={editmodal}
-          onHide={editModalClose}
-        />
+            passitem={editclient}
+            show={editmodal}
+            onHide={editModalClose}
+          />
         </div>
       </div>
     </div>

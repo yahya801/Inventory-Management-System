@@ -61,11 +61,12 @@ function Addbill() {
             <div>Client Added</div>
             <h2>Generate Bill</h2>
             <Form>
-              <Form.Group controlId="formHorizontalName">
-                <Form.Label column sm={2}>
+              <Form.Group >
+                <Row>
+                <Form.Label column sm={1}>
                   Bill Id
                 </Form.Label>
-                <Col sm={5}>
+                <Col sm={2}>
                   <Form.Control
                     type="name"
                     // value={clientname}
@@ -73,10 +74,10 @@ function Addbill() {
                     // onChange={(e) => Setclientname(e.target.value)}
                   />
                 </Col>
-                <Form.Label column sm={2}>
+                <Form.Label column sm={1}>
                   Date
                 </Form.Label>
-                <Col sm={5}>
+                <Col sm={2}>
                   <Form.Control
                     type="name"
                     value={billdate}
@@ -84,6 +85,7 @@ function Addbill() {
                     // onChange={(e) => Setshopaddress(e.target.value)}
                   />
                 </Col>
+                </Row>
                 <Form.Label column sm={2}>
                   Phone No
                 </Form.Label>

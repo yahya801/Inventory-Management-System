@@ -7,23 +7,23 @@ import Addinventory from "./addinventory";
 import moment from "moment";
 import Viewmodal from "./viewmodal";
 import Deletemodal from "./deletemodal";
-import Editmodal from './editmodal'
+import Editmodal from "./editmodal";
 import Pagination from "./pagination";
 const { ipcRenderer } = window.require("electron");
 
 function Inventorytableview() {
-
   const [addModal, SetaddModal] = useState(false);
   const [listener, Setlistener] = useState(false);
   const [inventory, Setinventory] = useState([]);
   const [deleteinvent, Setdeleteinvent] = useState("");
-  const [editinvent,Seteditinvent] = useState("")
+  const [editinvent, Seteditinvent] = useState("");
   const [inventoryModal, SetinventoryModal] = useState(false);
   const [deleteModal, SetdeleteModal] = useState(false);
   const [editModal, SeteditModal] = useState(false);
   const [inventoryview, Setinventoryview] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(7);
+  const [nodata, Setnodata] = useState(false);
 
   let addModalClose = () => {
     SetaddModal(false);
@@ -44,7 +44,14 @@ function Inventorytableview() {
       console.log(listener);
       Setlistener(true);
       ipcRenderer.on("InventoryQuerySuccessful", async (err, result) => {
-        Setinventory(result);
+        if (result.length > 0) {
+          Setinventory(result);
+          // Setnodata(false);
+        } else {
+          Setnodata(true);
+          Setinventory([]);
+        }
+
         // console.log(result)
       });
     }
@@ -74,10 +81,9 @@ function Inventorytableview() {
         return invent.inventID;
       })
       .indexOf(inventID);
-   Seteditinvent(inventory[inventoryindex])
-   SeteditModal(true)
-    };
-  
+    Seteditinvent(inventory[inventoryindex]);
+    SeteditModal(true);
+  };
 
   // Get current posts
   const indexOfLastPost = currentPage * postsPerPage;
@@ -88,29 +94,11 @@ function Inventorytableview() {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   return (
     <div>
-      <Inventorytop />
       <div style={{ paddingLeft: "10px" }}>
         <div className={styles.itembox}>
           <div className="row">
             <h5>Manage Inventory</h5>
-            <input
-              // className={styles.inputtext}
-              type="text"
-              //   value={search}
-              required
-              //   onChange={(e) => Setsearch(e.target.value)}
-              placeholder="Search"
-            />
-            {/* <button onClick={() => searchclick()}>Search</button> */}
-            {/* {searchredirect ? (
-              <Redirect to={`/itemsearch?itemname=${search}`} />
-            ) : null} */}
-            <ButtonToolbar>
-              <Button variant="primary" onClick={() => SetaddModal(true)}>
-                Add Inventory
-              </Button>
-              <Addinventory show={addModal} onHide={addModalClose} />
-            </ButtonToolbar>
+
             <Container>
               <Table striped bordered hover>
                 <thead>
@@ -130,6 +118,7 @@ function Inventorytableview() {
                   </tr>
                 </thead>
                 <tbody>
+                  {nodata ? `No Data Found` : null}
                   {currentinventory.map((invent) => (
                     <tr Key={invent.inventID}>
                       <td>{invent.lotno}</td>
@@ -182,7 +171,7 @@ function Inventorytableview() {
             show={deleteModal}
             onHide={deleteModalClose}
           />
-           <Editmodal
+          <Editmodal
             passitem={editinvent}
             show={editModal}
             onHide={editModalClose}

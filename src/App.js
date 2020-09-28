@@ -3,7 +3,7 @@ import Dashboard from "./components/dashboard";
 import { HashRouter as Router, Switch, Route } from "react-router-dom";
 import { Signup } from "./components/signup/signup";
 import { Signin } from "./components/signin/signin";
-import Additem from "./components/Items/additems/addview";
+import Additem from "./components/Items/additems/addpage";
 import { Itemsview } from "./components/Items/itemsview";
 import { Inventoryview } from "./components/inventory/inventoryview";
 import Itemsearch from "./components/Items/searchview";
@@ -13,6 +13,10 @@ import Addbroker from "./components/brokers/newbroker/addbroker";
 import AddClient from "./components/clients/newclients/addclientform";
 import Addbill from "./components/Bill/addbill";
 import Experiment from "./components/Bill/experiment";
+import Addinventory from "./components/inventory/newinventoy/addinventory"
+import Edititem from './components/Items/additems/edititems'
+import Editclient from './components/clients/newclients/editclients'
+import Editbroker from './components/brokers/newbroker/editbroker'
 
 export default class App extends Component {
   render() {
@@ -26,12 +30,16 @@ export default class App extends Component {
             <Route path="/dashboard" component={Dashboard} />
             <Route path="/items" component={Itemsview} />
             <Route path="/itemsadd" component={Additem} />
-            <Route path="/itemsearch" component={Itemsearch} />
+            <Route path="/edititems/ItemID=:id" component={Edititem}/>
+            {/* <Route path="/itemsearch" component={Itemsearch} /> */}
             <Route path="/inventory" component={Inventoryview} />
+            <Route path="/addinventory" component={Addinventory} />
             <Route path="/clients" component={Clientview} />
             <Route path="/addclients" component={AddClient} />
+            <Route path="/editclients/clientID=:id" component={Editclient}/>
             <Route path="/brokers" component={Brokermain} />
             <Route path="/addbrokers" component={Addbroker} />
+            <Route path="/editbrokers/brokerID=:id" component={Editbroker}/>
             <Route path="/addbill" component={Addbill} />
             <Route path="/bill" component={Experiment} />
           </div>

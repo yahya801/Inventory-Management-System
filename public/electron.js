@@ -108,19 +108,43 @@ ipcMain.on("Userlogin", (event, arg) => {
 
 ipcMain.on("AddItems", async (event, arg) => {
   console.log(arg);
+  let options = {
+    // buttons: ["Yes", "No", "Cancel"],
+    message: "Product Alreday exists try entering a different product",
+  };
   item = [arg.productname, arg.description, arg.category, arg.origin];
-  connection.query(DB.additem, item, (err) => {
+  connection.query(DB.addcheckitem, [arg.productname], (err, result) => {
     if (err) {
       console.log(err);
     } else {
-      // console.log("Item added")
-      // event.reply("ItemAdded", "Successfully Added Item");
+      console.log(result);
+      if (result.length === 0) {
+        connection.query(DB.additem, item, (err) => {
+          if (err) {
+            console.log(err);
+          } else {
+            // console.log("Item added")
+            event.sender.send("ItemAdded");
+          }
+        });
+      } else {
+        let response = dialog.showMessageBox(options);
+        console.log(response), dialog;
+      }
     }
   });
 });
 ipcMain.on("ItemsQuery", async (event) => {
   connection.query(DB.viewitems, (err, result) => {
     event.sender.send("ItemsQuerySuccessful", result);
+
+    //  console.log(result[0].itemname,"hhh")
+    //  console.log(result[1])
+  });
+});
+ipcMain.on("ItemQuery2", async (event) => {
+  connection.query(DB.viewitems, (err, result) => {
+    event.sender.send("ItemQuerySuccessful2", result);
 
     //  console.log(result[0].itemname,"hhh")
     //  console.log(result[1])
@@ -140,7 +164,18 @@ ipcMain.on("DeleteItem", (event, arg) => {
       console.log(response), dialog;
     } else {
       event.sender.send("DeletedSuccessfully");
+
       // console.log("Deleted Successfully")
+    }
+  });
+});
+
+ipcMain.on("EditItemInfo", (event, arg) => {
+  connection.query(DB.edititemview, [arg], (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      event.sender.send("EditItemView", result);
     }
   });
 });
@@ -169,6 +204,7 @@ ipcMain.on("EditItem", (event, arg) => {
     if (err) {
       console.log(err);
     } else {
+      event.sender.send("EditedSuccussfully");
       //  console.log("Updated")
     }
   });
@@ -183,24 +219,37 @@ ipcMain.on("SearchItems", (event, arg) => {
     }
   });
 });
-
+ipcMain.on("InventoryIDGet", (event, arg) => {
+  connection.query(DB.inventidget, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      
+        event.sender.send("InventID", result);
+   
+    }
+  });
+});
+//
 ipcMain.on("AddInventory", (event, arg) => {
   query = [
+    arg.inventID,
     arg.lotno,
     arg.date,
     arg.noofbags,
     arg.noofbags,
     arg.totalweight,
-    arg.price,
+    arg.priceperkg,
     arg.labourexpense,
     arg.transportexpense,
     arg.cartonexpense,
     arg.otherexpense,
     arg.totalexpense,
-    arg.ItemID,
+    arg.ItemID
   ];
   // connection.query(DB.lotnosearch,[arg.lotno],(err,result) => {
   //   if(result.length == 0){
+
   connection.query(DB.addinventory, query, (err) => {
     if (err) {
       console.log(err);
@@ -280,7 +329,15 @@ ipcMain.on("AddClient", (event, arg) => {
     }
   });
 });
-
+ipcMain.on("EditClientView", (event, arg) => {
+  connection.query(DB.editviewclient, [arg], (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      event.sender.send("viewEditClient", result);
+    }
+  });
+});
 ipcMain.on("EditClient", (event, arg) => {
   query = [
     arg.clientname,
@@ -379,6 +436,15 @@ ipcMain.on("DeleteBroker", (event, arg) => {
     }
   });
 });
+ipcMain.on("EditBrokerView", (event, arg) => {
+  connection.query(DB.editbrokerview, [arg], (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      event.sender.send("ViewEditBroker", result);
+    }
+  });
+});
 ipcMain.on("EditBroker", (event, arg) => {
   let update = false;
   query = [arg.brokername, arg.brokerinfo, arg.contact, arg.brokerID];
@@ -386,18 +452,9 @@ ipcMain.on("EditBroker", (event, arg) => {
     if (err) {
       console.log(err);
     } else {
-      update = true;
+      event.sender.send("BrokerEdited");
     }
   });
-  if (update) {
-    connection.query(DB.viewbroker, (err, result) => {
-      if (err) {
-        console.log(err);
-      } else {
-        event.sender.send("BrokerEdited", result);
-      }
-    });
-  }
 });
 
 ipcMain.on("BillInventory", (event, arg) => {

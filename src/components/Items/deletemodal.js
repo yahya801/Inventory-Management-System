@@ -5,6 +5,8 @@ function Deletemodal(props) {
   const handleclick = () => {
     console.log(props.passitem.ItemID);
     ipcRenderer.send("DeleteItem", props.passitem.ItemID);
+
+    
     props.onHide();
   };
   return (
